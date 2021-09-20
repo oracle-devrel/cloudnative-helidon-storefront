@@ -1,0 +1,7 @@
+app:
+  storename: "My Shop"
+  minimumchange: 2
+
+#tracing:
+#  service: "storefront"
+#  host: "zipkin"
