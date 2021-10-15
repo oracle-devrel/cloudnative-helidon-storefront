@@ -1,0 +1,73 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: storefront-direct-ingress
+  annotations:
+    # use the shared ingress-nginx
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  tls:
+  - hosts: 
+    # ${EXTERNAL_IP} must be replaced with the IP address of the ingress controller
+    - store.${EXTERNAL_IP}.nip.io
+    secretName: tls-store
+  rules:
+    # ${EXTERNAL_IP} must be replaced with the IP address of the ingress controller
+  - host: store.${EXTERNAL_IP}.nip.io
+    http:
+      paths:
+      - path: /store
+        pathType: Prefix
+        backend:
+          service:
+            name: storefront
+            port:
+              name: storefront
+      - path: /openapi
+        pathType: Exact
+        backend:
+          service:
+            name: storefront
+            port:
+              name: storefront
+          
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: storefront-rewrite-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    # nginx.ingress.kubernetes.io/use-regex: "true"
+    # rewrite the requests
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  tls:
+  - hosts: 
+    # ${EXTERNAL_IP} must be replaced with the IP address of the ingress controller
+    - store.${EXTERNAL_IP}.nip.io
+    secretName: tls-store
+  rules:
+    # ${EXTERNAL_IP} must be replaced with the IP address of the ingress controller
+  - host: store.${EXTERNAL_IP}.nip.io
+    http:
+      paths:
+        #any path starting with sf will have the /sf removed before being passed to the service on the specified url
+        #for example this handles /sf/status -> /status and /sf/minimumChange -> /minimumChange on arrival at the 
+        #storefront server
+      - path: /sf(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: storefront
+            port:
+              name: storefront
+        #any path starting with sfmtg will have the /sfmgt removed before being passed to the service on the specified url
+      - path: /sfmgt(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: storefront
+            port:
+              name: storefront-mgt
