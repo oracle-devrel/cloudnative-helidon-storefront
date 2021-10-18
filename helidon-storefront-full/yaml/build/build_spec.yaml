@@ -6,8 +6,9 @@ shell: bash
 
 env:
   # these are local variables to the build config, we need to declare them here so thet will follow on in subsequent build stages
+  # Note that PATH seems to be automatically added to the list of variables who's value is preserved across commands
   variables:
-   HOLDINGPATH: "empty"
+   # HOLDINGPATH: "empty"
    JAVA_HOME: "javahome"
     
   # the value of a vaultVariable is the secret-id (in OCI ID format) stored in the OCI Vault service
@@ -26,8 +27,8 @@ steps:
     command: |
       echo Path is
       echo $PATH
-      echo HOLDINGPATH is
-      echo $HOLDINGPATH
+      # echo HOLDINGPATH is
+      # echo $HOLDINGPATH
       echo JAVA_HOME is
       echo $JAVA_HOME
       cd ${OCI_PRIMARY_SOURCE_DIR}
@@ -55,11 +56,11 @@ steps:
       ls -l
       export JAVA_HOME=~/InstalledSoftware/jdk-11
       export PATH=$JAVA_HOME/bin:$PATH
-      export HOLDINGPATH=$PATH
+      # export HOLDINGPATH=$PATH
       echo Path is
       echo $PATH
-      echo HOLDINGPATH is
-      echo $HOLDINGPATH
+      # echo HOLDINGPATH is
+      # echo $HOLDINGPATH
       echo JAVA_HOME is
       echo $JAVA_HOME
       java -version
@@ -78,11 +79,11 @@ steps:
     command: |
       echo PATH initially is 
       echo $PATH
-      echo HOLDINGPATH is
-      echo $HOLDINGPATH
-      export PATH=$HOLDINGPATH
-      echo PATH after transfer is 
-      echo $PATH
+      # echo HOLDINGPATH is
+      # echo $HOLDINGPATH
+      # export PATH=$HOLDINGPATH
+      # echo PATH after transfer is 
+      # echo $PATH
       echo JAVA_HOME is
       echo $JAVA_HOME
       echo STOREFRONTVERSION is
