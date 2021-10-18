@@ -13,7 +13,6 @@ env:
   # vaultVariables:
 
   # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
-  # For this Build to run, the Build Pipeline needs to have a BUILDRUN_HASH parameter set
   exportedVariables:
     - STOREFRONTVERSION
 
@@ -43,11 +42,12 @@ steps:
       cd ~
       mkdir InstalledSoftware
       cd InstalledSoftware
-      wget https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz
-      tar -xvf openjdk-11+28_linux-x64_bin.tar.gz
+      wget -q https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz
+      tar -xf openjdk-11+28_linux-x64_bin.tar.gz
       ls -l
       export JAVA_HOME=~/InstalledSoftware/jdk-11
       export PATH=~/InstalledSoftware/jdk-11/bin:$PATH
+      echo $PATH
       java -version
     onFailure:
       - type: Command
@@ -59,10 +59,14 @@ steps:
         runAs: root
         
   - type: Command
-    name: "Confirm JDK11"
+    name: "Confirm Variables"
     timeoutInSeconds: 10000
     command: |
-      echo This shoudl be Java 11
+      echo PATH is 
+      echo $PATH
+      echo STOREFRONTVERSION is
+      echo $STOREFRONTVERSION
+      echo This should be Java 11
       java -version
     onFailure:
       - type: Command
