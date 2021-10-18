@@ -27,8 +27,6 @@ steps:
     command: |
       echo Path is
       echo $PATH
-      # echo HOLDINGPATH is
-      # echo $HOLDINGPATH
       echo JAVA_HOME is
       echo $JAVA_HOME
       cd ${OCI_PRIMARY_SOURCE_DIR}
@@ -56,11 +54,8 @@ steps:
       ls -l
       export JAVA_HOME=~/InstalledSoftware/jdk-11
       export PATH=$JAVA_HOME/bin:$PATH
-      # export HOLDINGPATH=$PATH
       echo Path is
       echo $PATH
-      # echo HOLDINGPATH is
-      # echo $HOLDINGPATH
       echo JAVA_HOME is
       echo $JAVA_HOME
       java -version
@@ -74,16 +69,11 @@ steps:
         runAs: root
         
   - type: Command
-    name: "Confirm Variables"
+    name: "Confirm Variables and versions"
     timeoutInSeconds: 10000
     command: |
-      echo PATH initially is 
+      echo PATH is 
       echo $PATH
-      # echo HOLDINGPATH is
-      # echo $HOLDINGPATH
-      # export PATH=$HOLDINGPATH
-      # echo PATH after transfer is 
-      # echo $PATH
       echo JAVA_HOME is
       echo $JAVA_HOME
       echo STOREFRONTVERSION is
@@ -101,10 +91,10 @@ steps:
         timeoutInSeconds: 400
         runAs: root
         
-  #- type: Command
-  #  name: "Build Source 1"
-  #  timeoutInSeconds: 400
-  #  command: |
-  #    cd ${OCI_PRIMARY_SOURCE_DIR}
-  #    echo Running maven package - Working in `pwd`
-  #    mvn package
+  - type: Command
+    name: "Build Source 1"
+    timeoutInSeconds: 400
+    command: |
+      cd ${OCI_PRIMARY_SOURCE_DIR}
+      echo Running maven build - Working in `pwd`
+      mvn build
