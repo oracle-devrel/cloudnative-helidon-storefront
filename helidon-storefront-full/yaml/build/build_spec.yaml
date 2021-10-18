@@ -23,9 +23,9 @@ steps:
     name: "Extract Export variables"
     timeoutInSeconds: 40
     command: |
-      cd ${OCI_WORKSPACE_DIR}
+      cd ${OCI_PRIMARY_SOURCE_DIR}
       echo Extracting export variables - Working in `pwd`
-      export STOREFRONTVERSION=`grep "VERSION = " cloudnative-helidon-storefront/helidon-storefront-full/src/main/java/com/oracle/labs/helidon/storefront/resources/StatusResource.java  | awk '{print $7}' | sed -e 's/"//g' -e s'/;//'`
+      export STOREFRONTVERSION=`grep "VERSION = " helidon-storefront-full/src/main/java/com/oracle/labs/helidon/storefront/resources/StatusResource.java  | awk '{print $7}' | sed -e 's/"//g' -e s'/;//'`
       echo "STOREFRONTVERSION: " $STOREFRONTVERSION
     onFailure:
       - type: Command
