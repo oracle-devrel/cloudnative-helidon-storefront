@@ -95,6 +95,6 @@ steps:
     name: "Build Source 1"
     timeoutInSeconds: 400
     command: |
-      cd ${OCI_PRIMARY_SOURCE_DIR}
+      cd ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full
       echo Running maven build - Working in `pwd`
       mvn build
