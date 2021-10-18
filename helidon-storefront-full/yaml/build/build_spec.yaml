@@ -1,0 +1,45 @@
+version: 0.1
+component: build
+timeoutInSeconds: 6000
+runAs: root
+shell: bash
+
+env:
+  # these are local variables to the build config
+  # variables:
+  #   key: "value"
+  # the value of a vaultVariable is the secret-id (in OCI ID format) stored in the OCI Vault service
+  # you can then access the value of that secret in your build_spec.yaml commands
+  # vaultVariables:
+
+  # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
+  # For this Build to run, the Build Pipeline needs to have a BUILDRUN_HASH parameter set
+  exportedVariables:
+    - STOREFRONTVERSION
+
+
+steps:
+  - type: Command
+    name: "Extract Export variables"
+    timeoutInSeconds: 40
+    command: |
+      cd ${OCI_WORKSPACE_DIR}
+      echo Extracting export variables - Working in `pwd`
+      export STOREFRONTVERSION=`grep "VERSION = " cloudnative-helidon-storefront/helidon-storefront-full/src/main/java/com/oracle/labs/helidon/storefront/resources/StatusResource.java  | awk '{print $7}' | sed -e 's/"//g' -e s'/;//'`
+      echo "STOREFRONTVERSION: " $STOREFRONTVERSION
+    onFailure:
+      - type: Command
+        timeoutInSeconds: 40
+        command: |
+          echo "Handling Failure"
+          echo "Failure successfully handled"
+        timeoutInSeconds: 400
+        runAs: root
+
+  #- type: Command
+  #  name: "Build Source 1"
+  #  timeoutInSeconds: 400
+  #  command: |
+  #    cd ${OCI_WORKSPACE_DIR}
+  #    echo Running maven package - Working in `pwd`
+  #    mvn package
