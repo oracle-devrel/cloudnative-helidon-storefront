@@ -68,6 +68,8 @@ steps:
       echo $STOREFRONTVERSION
       echo This should be Java 11
       java -version
+      echo maven version
+      mvn -v 
     onFailure:
       - type: Command
         timeoutInSeconds: 40
