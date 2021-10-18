@@ -5,9 +5,11 @@ runAs: root
 shell: bash
 
 env:
-  # these are local variables to the build config
-  # variables:
-  #   key: "value"
+  # these are local variables to the build config, we need to declare them here so thet will follow on in subsequent build stages
+  variables:
+   PATH: "value"
+   JAVA_HOME: "javahome"
+    
   # the value of a vaultVariable is the secret-id (in OCI ID format) stored in the OCI Vault service
   # you can then access the value of that secret in your build_spec.yaml commands
   # vaultVariables:
@@ -22,6 +24,10 @@ steps:
     name: "Extract Export variables"
     timeoutInSeconds: 40
     command: |
+      echo Path is
+      echo $PATH
+      echo JAVA_HOME is
+      echo $JAVA_HOME
       cd ${OCI_PRIMARY_SOURCE_DIR}
       echo Extracting export variables - Working in `pwd`
       export STOREFRONTVERSION=`grep "VERSION = " helidon-storefront-full/src/main/java/com/oracle/labs/helidon/storefront/resources/StatusResource.java  | awk '{print $7}' | sed -e 's/"//g' -e s'/;//'`
@@ -46,8 +52,11 @@ steps:
       tar -xf openjdk-11+28_linux-x64_bin.tar.gz
       ls -l
       export JAVA_HOME=~/InstalledSoftware/jdk-11
-      export PATH=~/InstalledSoftware/jdk-11/bin:$PATH
+      export PATH=$JAVA_HOME/bin:$PATH
+      echo Path is
       echo $PATH
+      echo JAVA_HOME is
+      echo $JAVA_HOME
       java -version
     onFailure:
       - type: Command
@@ -64,6 +73,8 @@ steps:
     command: |
       echo PATH is 
       echo $PATH
+      echo JAVA_HOME is
+      echo $JAVA_HOME
       echo STOREFRONTVERSION is
       echo $STOREFRONTVERSION
       echo This should be Java 11
