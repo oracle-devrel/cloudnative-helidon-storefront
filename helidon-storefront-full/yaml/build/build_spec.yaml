@@ -92,9 +92,9 @@ steps:
         runAs: root
         
   - type: Command
-    name: "Build Source 1"
+    name: "Build Source and pack into conteiner image"
     timeoutInSeconds: 400
     command: |
       cd ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full
-      echo Running maven compile - Working in `pwd`
-      mvn compile
+      echo Running maven package - Working in `pwd`
+      mvn package
