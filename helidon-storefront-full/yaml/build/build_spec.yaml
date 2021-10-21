@@ -25,8 +25,8 @@ steps:
     name: "Pull base graalvm image"
     timeoutInSeconds: 40
     command: |
-      docker pull openzipkin/zipkin:2.23.4
-      echo Open Zipkin image pulled
+      docker pull openjdk:11
+      echo Open JDK image pulled
     onFailure:
       - type: Command
         timeoutInSeconds: 40
