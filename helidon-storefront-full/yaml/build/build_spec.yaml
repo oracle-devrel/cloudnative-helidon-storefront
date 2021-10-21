@@ -13,8 +13,7 @@ env:
     
   # the value of a vaultVariable is the secret-id (in OCI ID format) stored in the OCI Vault service
   # you can then access the value of that secret in your build_spec.yaml commands
-  vaultVariables:
-    GITHUB_PAT: ocid1.vaultsecret.oc1.eu-frankfurt-1.amaaaaaa4g77oeyaliadw2plsmcgsfyxjii43xd777wepbsm5nacekelm7mq
+  # vaultVariables:
 
   # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
   exportedVariables:
@@ -26,10 +25,8 @@ steps:
     name: "Pull base graalvm image"
     timeoutInSeconds: 40
     command: |
-      echo $GITHUB_PAT
-      docker login ghcr.io -u USERNAME -p $GITHUB_PAT
-      docker pull ghcr.io/graalvm/graalvm-ce:java11-21.3.0
-      echo image pulled
+      docker pull openzipkin/zipkin:2.23.4
+      echo Open Zipkin image pulled
     onFailure:
       - type: Command
         timeoutInSeconds: 40
