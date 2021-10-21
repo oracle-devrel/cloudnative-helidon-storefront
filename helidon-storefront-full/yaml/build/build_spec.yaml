@@ -25,8 +25,12 @@ steps:
     name: "Pull base graalvm image"
     timeoutInSeconds: 40
     command: |
+      echo about to pull backyards-sre-alert-exporter image
       docker pull ghcr.io/banzaicloud/backyards-sre-alert-exporter:latest
       echo backyards-sre-alert-exporter image pulled
+      echo about to pull graalvm image
+      docker pull ghcr.io/graalvm/graalvm-ce:java11-21.3.0
+      echo graalvm image pulled 
     onFailure:
       - type: Command
         timeoutInSeconds: 40
