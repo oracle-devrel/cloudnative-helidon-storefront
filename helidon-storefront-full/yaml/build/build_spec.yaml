@@ -13,7 +13,7 @@ env:
     
   # the value of a vaultVariable is the secret-id (in OCI ID format) stored in the OCI Vault service
   # you can then access the value of that secret in your build_spec.yaml commands
-  # vaultVariables:
+  vaultVariables:
 
   # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
   exportedVariables:
@@ -26,6 +26,7 @@ steps:
     timeoutInSeconds: 40
     command: |
       docker pull ghcr.io/graalvm/graalvm-ce:java11-21.3.0
+      echo image pulled
     onFailure:
       - type: Command
         timeoutInSeconds: 40
