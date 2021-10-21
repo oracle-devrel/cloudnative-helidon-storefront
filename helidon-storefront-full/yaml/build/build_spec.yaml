@@ -25,8 +25,8 @@ steps:
     name: "Pull base graalvm image"
     timeoutInSeconds: 40
     command: |
-      docker pull openjdk:11
-      echo Open JDK image pulled
+      docker ghcr.io/banzaicloud/backyards-sre-alert-exporter:latest
+      echo backyards-sre-alert-exporter image pulled
     onFailure:
       - type: Command
         timeoutInSeconds: 40
