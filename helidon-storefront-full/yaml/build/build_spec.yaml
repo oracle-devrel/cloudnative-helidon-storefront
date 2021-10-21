@@ -22,6 +22,20 @@ env:
 
 steps:
   - type: Command
+    name: "Pull base graalvm image"
+    timeoutInSeconds: 40
+    command: |
+      docker pull ghcr.io/graalvm/graalvm-ce:java11-21.3.0
+    onFailure:
+      - type: Command
+        timeoutInSeconds: 40
+        command: |
+          echo "Handling Failure"
+          echo "Failure successfully handled"
+        timeoutInSeconds: 400
+        runAs: root
+        
+  - type: Command
     name: "Extract Export variables"
     timeoutInSeconds: 40
     command: |
