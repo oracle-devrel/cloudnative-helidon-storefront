@@ -41,7 +41,7 @@ steps:
       echo Extracting export variables - Working in `pwd`
       export STOREFRONT_VERSION=`grep "VERSION = " helidon-storefront-full/src/main/java/com/oracle/labs/helidon/storefront/resources/StatusResource.java  | awk '{print $7}' | sed -e 's/"//g' -e s'/;//'`
       echo "STOREFRONT_VERSION: " $STOREFRONT_VERSION
-      echo image will be stored to ${OCIR_HOST}/${OCIR_STORAGE_NAMEPACE}/storefront:${STOREFRONT_VERSION}
+      echo image will be stored to ${OCIR_HOST}/${OCIR_STORAGE_NAMEPACE}/${YOUR_INITIALS}/storefront:${STOREFRONT_VERSION}
     onFailure:
       - type: Command
         timeoutInSeconds: 40
