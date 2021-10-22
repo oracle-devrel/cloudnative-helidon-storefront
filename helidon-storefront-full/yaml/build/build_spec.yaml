@@ -145,5 +145,4 @@ steps:
 outputArtifacts:
   - name: storefront_image
     type: DOCKER_IMAGE
-    # location: ${CONTAINER_IMAGE_TAG}
-    location: fra.ocir.io/oraseemeatechse/storefront:0.0.3
+    location: storefront
