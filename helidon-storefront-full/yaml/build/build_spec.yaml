@@ -137,16 +137,16 @@ steps:
     command: |
       cd ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full
       echo Running docker update - Working in `pwd`
-      docker build  --tag storefront --file Dockerfile . 
+      docker build  --tag storefront:latest --file Dockerfile . 
       echo images are
       docker images
      
      
 # This basically preserves and "names" the artifacts below (if it's not here it gets junked) so the deliver artifact stage can handle them
 outputArtifacts:
-  #- name: storefront_container_image
-  #  type: DOCKER_IMAGE
-  #  location: storefront
+  - name: storefront_container_image
+    type: DOCKER_IMAGE
+    location: storefront:latest
   - name: service_yaml
     type: BINARY
     location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full/yaml/deployment/serviceStorefront.yaml
