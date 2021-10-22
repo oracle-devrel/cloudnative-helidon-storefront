@@ -13,8 +13,9 @@ env:
     
   # the value of a vaultVariable is the secret-id (in OCI ID format) stored in the OCI Vault service
   # you can then access the value of that secret in your build_spec.yaml commands
-  # vaultVariables:
-
+  vaultVariables:
+    GITHUB_PAT: ${GITHUB_PAT_SECRET_OCID}
+    
   # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
   exportedVariables:
     - STOREFRONTVERSION
@@ -22,15 +23,18 @@ env:
 
 steps:
   - type: Command
-    name: "Pull base graalvm image"
-    timeoutInSeconds: 40
+    name: "Pull base container image"
+    timeoutInSeconds: 100
     command: |
-      echo about to pull backyards-sre-alert-exporter image
-      docker pull ghcr.io/banzaicloud/backyards-sre-alert-exporter:latest
-      echo backyards-sre-alert-exporter image pulled
-      echo about to pull graalvm image
-      docker pull ghcr.io/graalvm/graalvm-ce:java11-21.3.0
-      echo graalvm image pulled 
+      echo About to pull base container image for java
+      docker pull openjdk:11
+      echo Pulled base container image for java
+      #echo about to pull backyards-sre-alert-exporter image
+      #docker pull ghcr.io/banzaicloud/backyards-sre-alert-exporter:latest
+      #echo backyards-sre-alert-exporter image pulled
+      #echo about to pull graalvm image
+      #docker pull ghcr.io/graalvm/graalvm-ce:java11-21.3.0
+      #echo graalvm image pulled 
     onFailure:
       - type: Command
         timeoutInSeconds: 40
@@ -42,7 +46,7 @@ steps:
         
   - type: Command
     name: "Extract Export variables"
-    timeoutInSeconds: 40
+    timeoutInSeconds: 10
     command: |
       echo Path is
       echo $PATH
@@ -89,7 +93,7 @@ steps:
         
   - type: Command
     name: "Confirm Variables and versions"
-    timeoutInSeconds: 10000
+    timeoutInSeconds: 10
     command: |
       echo PATH is 
       echo $PATH
@@ -111,9 +115,17 @@ steps:
         runAs: root
         
   - type: Command
-    name: "Build Source and pack into conteiner image"
+    name: "Build Source and pack into container image"
     timeoutInSeconds: 400
     command: |
       cd ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full
       echo Running maven package - Working in `pwd`
-      mvn package
+      mvn package  
+          
+  - type: Command
+    name: "Fix resources location in container image"
+    timeoutInSeconds: 60
+    command: |
+      cd ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full
+      echo Running docker update - Working in `pwd`
+      docker build  --tag storefront:$STOREFRONTVERSION --file Dockerfile . 
