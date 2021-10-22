@@ -21,7 +21,7 @@ spec:
       - name: storefront
         # This needs to match the artifact details is using OCI DevOps
         image: ${OCIR_HOST}/${OCIR_STORAGE_NAMEPACE}/${YOUR_INITIALS}/storefront:${STOREFRONT_VERSION}
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - name: service-port
           containerPort: 8080
