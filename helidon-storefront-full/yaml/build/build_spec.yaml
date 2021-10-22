@@ -137,7 +137,7 @@ steps:
     command: |
       cd ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full
       echo Running docker update - Working in `pwd`
-      docker build  --tag $storefront --file Dockerfile . 
+      docker build  --tag storefront --file Dockerfile . 
       echo images are
       docker images
      
