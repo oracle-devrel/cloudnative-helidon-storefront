@@ -144,5 +144,5 @@ steps:
       
 outputArtifacts:
   - name: storefront_image
-    type: docker
+    type: DOCKER_IMAGE
     location: $CONTAINER_IMAGE_TAG
