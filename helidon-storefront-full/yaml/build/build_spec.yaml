@@ -141,3 +141,8 @@ steps:
       docker build  --tag $CONTAINER_IMAGE_TAG --file Dockerfile . 
       echo images are
       docker images
+      
+outputArtifacts:
+  - name: storefront_image
+    type: docker
+    location: $CONTAINER_IMAGE_TAG
