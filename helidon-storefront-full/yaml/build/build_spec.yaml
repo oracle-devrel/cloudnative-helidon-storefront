@@ -149,10 +149,10 @@ outputArtifacts:
     location: storefront
   - name: service_yaml
     type: BINARY
-    location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full/deployment/serviceStorefront.yaml
+    location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full/yaml/deployment/serviceStorefront.yaml
   - name: ingressRules_yaml
     type: BINARY
-    location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full/deployment/ingressStorefrontRules.yaml
+    location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full/yaml/deployment/ingressStorefrontRules.yaml
   - name: deployment_yaml
     type: BINARY
-    location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full/deployment/storefront-deployment.yaml
+    location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full/yaml/deployment/storefront-deployment.yaml
