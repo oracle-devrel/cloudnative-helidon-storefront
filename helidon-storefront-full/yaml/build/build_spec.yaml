@@ -16,7 +16,6 @@ env:
   variables:
    # HOLDINGPATH: "empty"
    JAVA_HOME: "javahome"
-   CONTAINER_IMAGE_TAG: "none"
     
   # the value of a vaultVariable is the secret-id (in OCI ID format) stored in the OCI Vault service
   # you can then access the value of that secret in your build_spec.yaml commands
@@ -29,30 +28,7 @@ env:
     - STOREFRONT_VERSION
 
 
-steps:
-  - type: Command
-    name: "Pull base container image"
-    timeoutInSeconds: 100
-    command: |
-      echo Skipping pull of base java image at this point
-      #echo About to pull base container image for java
-      #docker pull openjdk:11
-      #echo Pulled base container image for java
-      #echo about to pull backyards-sre-alert-exporter image
-      #docker pull ghcr.io/banzaicloud/backyards-sre-alert-exporter:latest
-      #echo backyards-sre-alert-exporter image pulled
-      #echo about to pull graalvm image
-      #docker pull ghcr.io/graalvm/graalvm-ce:java11-21.3.0
-      #echo graalvm image pulled 
-    onFailure:
-      - type: Command
-        timeoutInSeconds: 40
-        command: |
-          echo "Handling Failure"
-          echo "Failure successfully handled"
-        timeoutInSeconds: 400
-        runAs: root
-        
+steps:        
   - type: Command
     name: "Extract Export variables"
     timeoutInSeconds: 10
@@ -65,6 +41,7 @@ steps:
       echo Extracting export variables - Working in `pwd`
       export STOREFRONT_VERSION=`grep "VERSION = " helidon-storefront-full/src/main/java/com/oracle/labs/helidon/storefront/resources/StatusResource.java  | awk '{print $7}' | sed -e 's/"//g' -e s'/;//'`
       echo "STOREFRONT_VERSION: " $STOREFRONT_VERSION
+      echo image will be stored to ${OCIR_HOST}/${OCIR_STORAGE_NAMEPACE}/storefront:${STOREFRONT_VERSION}
     onFailure:
       - type: Command
         timeoutInSeconds: 40
