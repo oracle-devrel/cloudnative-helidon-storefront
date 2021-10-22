@@ -4,17 +4,25 @@ timeoutInSeconds: 6000
 runAs: root
 shell: bash
 
+# For this to work the folloing params need to be set in the pipeline
+# ignore for now GITHUB_PATH_SECRET_OCID - the OCID of the vault secret containing the users github parsonal access token
+# ignore for now GITHUB_USERNAME = the OCID of the vault secret contining the users github usename
+# OCIR_HOST - The hostname part of the image tags for the image registry to use 
+# OCIR_STORAGE_NAMEPACE - The tenancy storage namespace part of the image tag
+
 env:
   # these are local variables to the build config, we need to declare them here so thet will follow on in subsequent build stages
   # Note that PATH seems to be automatically added to the list of variables who's value is preserved across commands
   variables:
    # HOLDINGPATH: "empty"
    JAVA_HOME: "javahome"
+   CONTAINER_IMAGE_TAG: "none"
     
   # the value of a vaultVariable is the secret-id (in OCI ID format) stored in the OCI Vault service
   # you can then access the value of that secret in your build_spec.yaml commands
-  vaultVariables:
-    GITHUB_PAT: ${GITHUB_PAT_SECRET_OCID}
+  #vaultVariables:
+  #  GITHUB_USER: ${GITHUB_USER_SECRET_OCID}
+  #  GITHUB_PAT: ${GITHUB_PAT_SECRET_OCID}
     
   # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
   exportedVariables:
@@ -128,4 +136,8 @@ steps:
     command: |
       cd ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full
       echo Running docker update - Working in `pwd`
-      docker build  --tag storefront:$STOREFRONTVERSION --file Dockerfile . 
+      export CONTAINER_IMAGE_TAG=${OCIR_HOST}/${OCIR_STORAGE_NAMEPACE}/storefront:$STOREFRONTVERSION
+      echo CONTAINER_IMAGE_TAG is $CONTAINER_IMAGE_TAG
+      docker build  --tag $CONTAINER_IMAGE_TAG --file Dockerfile . 
+      echo images are
+      docker images
