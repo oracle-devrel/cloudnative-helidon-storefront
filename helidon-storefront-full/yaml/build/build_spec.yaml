@@ -26,7 +26,7 @@ env:
     
   # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
   exportedVariables:
-    - STOREFRONTVERSION
+    - STOREFRONT_VERSION
 
 
 steps:
@@ -34,9 +34,10 @@ steps:
     name: "Pull base container image"
     timeoutInSeconds: 100
     command: |
-      echo About to pull base container image for java
-      docker pull openjdk:11
-      echo Pulled base container image for java
+      echo Skipping pull of base java image at this point
+      #echo About to pull base container image for java
+      #docker pull openjdk:11
+      #echo Pulled base container image for java
       #echo about to pull backyards-sre-alert-exporter image
       #docker pull ghcr.io/banzaicloud/backyards-sre-alert-exporter:latest
       #echo backyards-sre-alert-exporter image pulled
@@ -62,8 +63,8 @@ steps:
       echo $JAVA_HOME
       cd ${OCI_PRIMARY_SOURCE_DIR}
       echo Extracting export variables - Working in `pwd`
-      export STOREFRONTVERSION=`grep "VERSION = " helidon-storefront-full/src/main/java/com/oracle/labs/helidon/storefront/resources/StatusResource.java  | awk '{print $7}' | sed -e 's/"//g' -e s'/;//'`
-      echo "STOREFRONTVERSION: " $STOREFRONTVERSION
+      export STOREFRONT_VERSION=`grep "VERSION = " helidon-storefront-full/src/main/java/com/oracle/labs/helidon/storefront/resources/StatusResource.java  | awk '{print $7}' | sed -e 's/"//g' -e s'/;//'`
+      echo "STOREFRONT_VERSION: " $STOREFRONT_VERSION
     onFailure:
       - type: Command
         timeoutInSeconds: 40
@@ -74,7 +75,7 @@ steps:
         runAs: root
 
   - type: Command
-    name: "Install JDK11"
+    name: "Install local JDK11"
     timeoutInSeconds: 10000
     command: |
       cd ~
@@ -107,8 +108,8 @@ steps:
       echo $PATH
       echo JAVA_HOME is
       echo $JAVA_HOME
-      echo STOREFRONTVERSION is
-      echo $STOREFRONTVERSION
+      echo STOREFRONT_VERSION is
+      echo $STOREFRONT_VERSION
       echo This should be Java 11
       java -version
       echo maven version
@@ -136,13 +137,22 @@ steps:
     command: |
       cd ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full
       echo Running docker update - Working in `pwd`
-      export CONTAINER_IMAGE_TAG=${OCIR_HOST}/${OCIR_STORAGE_NAMEPACE}/storefront:$STOREFRONTVERSION
-      echo CONTAINER_IMAGE_TAG is $CONTAINER_IMAGE_TAG
-      docker build  --tag $CONTAINER_IMAGE_TAG --file Dockerfile . 
+      docker build  --tag $storefront --file Dockerfile . 
       echo images are
       docker images
-      
+     
+     
+# This basically preserves and "names" the artifacts below (if it's not here it gets junked) so the deliver artifact stage can handle them
 outputArtifacts:
-  - name: storefront_image
+  - name: storefront_container_image
     type: DOCKER_IMAGE
     location: storefront
+  - name: service_yaml
+    type: BINARY
+    location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full/deployment/serviceStorefront.yaml
+  - name: ingressRules_yaml
+    type: BINARY
+    location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full/deployment/ingressStorefrontRules.yaml
+  - name: deployment_yaml
+    type: BINARY
+    location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full/deployment/storefront-deployment.yaml
