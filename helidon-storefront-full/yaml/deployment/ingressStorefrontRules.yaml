@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: storefront-direct-ingress
-  namespace: ${NAMESPACE}
+  namespace: ${KUBERNETES_NAMESPACE}
   annotations:
     # use the shared ingress-nginx
     kubernetes.io/ingress.class: "nginx"
@@ -38,7 +38,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: storefront-rewrite-ingress
-  namespace: ${NAMESPACE}
+  namespace: ${KUBERNETES_NAMESPACE}
   annotations:
     kubernetes.io/ingress.class: "nginx"
     # nginx.ingress.kubernetes.io/use-regex: "true"
