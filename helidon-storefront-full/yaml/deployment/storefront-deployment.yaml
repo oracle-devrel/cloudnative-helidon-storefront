@@ -18,7 +18,8 @@ spec:
     spec:
       containers:
       - name: storefront
-        image: fra.ocir.io/oractdemeabdmnative/h-k8s_repo/storefront:${STOREFRONTVERSION}
+        # This needs to match the artifact details is using OCI DevOps
+        image: ${OCIR_HOST}/${OCIR_STORAGE_NAMEPACE}/h-k8s_repo/storefront:${STOREFRONT_VERSION}
         imagePullPolicy: IfNotPresent
         ports:
         - name: service-port
@@ -30,53 +31,53 @@ spec:
             # Set this to be quarter of a CPU for now
             cpu: "250m"
         # Use this to check if the pod is alive
-#        livenessProbe:
-#          #Simple check to see if the liveness call works
-#          # If must return a 200 - 399 http status code
-#          httpGet:
-#             path: /health/live
-#             port: health-port
-#          # Give it time to make sure it's had a chance to start up
-#          # Comment this out when using a startup probe
-#          initialDelaySeconds: 120
-#          # Let it have a 5 second timeout to wait for a response
-#          timeoutSeconds: 5
-#          # Check every 5 seconds (default is 1)
-#          periodSeconds: 5
-#          # Need to have 3 failures before we decide the pod is dead, not just slow
-#          failureThreshold: 3
-#        # This checks if the pod is ready to process requests
-#        readinessProbe:
-#          exec:
-#            command:
-#            - /bin/bash
-#            - -c
-#            - 'curl -s http://localhost:9080/health/ready | grep "\"outcome\":\"UP\""'
-#          # No point in checking until it's been running for a while 
-#          # Comment this out when using a startup probe
-#          initialDelaySeconds: 15
-#          # Allow a short delay for the response
-#          timeoutSeconds: 5
-#          # Check every 10 seconds
-#          periodSeconds: 10
-#          # Need at least only one fail for this to be a problem
-#          failureThreshold: 1
-#        # Use this to check if the pod is started this has to pass before the liveness kicks in
-#        # note that this was released as beta in k8s V 1.18
-#        startupProbe:
-#          #Simple check to see if the status call works
-#          # If must return a 200 - 399 http status code
-#          httpGet:
-#            path: /status
-#            port: service-port
-#          # No initial delay - it starts checking immediately
-#          # Let it have a 5 second timeout
-#          timeoutSeconds: 5
-#          # allow for up to 48 failures
-#          failureThreshold: 48
-#          # Check every 5 seconds
-#          periodSeconds: 5
-#          # If after failureThreshold * periodSeconds it's not up and running then it's determined to have failed (4 mins in this case)
+        livenessProbe:
+          #Simple check to see if the liveness call works
+          # If must return a 200 - 399 http status code
+          httpGet:
+             path: /health/live
+             port: health-port
+          # Give it time to make sure it's had a chance to start up
+          # Comment this out when using a startup probe
+          # initialDelaySeconds: 120
+          # Let it have a 5 second timeout to wait for a response
+          timeoutSeconds: 5
+          # Check every 5 seconds (default is 1)
+          periodSeconds: 5
+          # Need to have 3 failures before we decide the pod is dead, not just slow
+          failureThreshold: 3
+        # This checks if the pod is ready to process requests
+        readinessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - 'curl -s http://localhost:9080/health/ready | grep "\"outcome\":\"UP\""'
+          # No point in checking until it's been running for a while 
+          # Comment this out when using a startup probe
+          initialDelaySeconds: 15
+          # Allow a short delay for the response
+          timeoutSeconds: 5
+          # Check every 10 seconds
+          periodSeconds: 10
+          # Need at least only one fail for this to be a problem
+          failureThreshold: 1
+        # Use this to check if the pod is started this has to pass before the liveness kicks in
+        # note that this was released as beta in k8s V 1.18
+        startupProbe:
+          #Simple check to see if the status call works
+          # If must return a 200 - 399 http status code
+          httpGet:
+            path: /status
+            port: service-port
+          # No initial delay - it starts checking immediately
+          # Let it have a 5 second timeout
+          timeoutSeconds: 5
+          # allow for up to 48 failures
+          failureThreshold: 48
+          # Check every 5 seconds
+          periodSeconds: 5
+          # If after failureThreshold * periodSeconds it's not up and running then it's determined to have failed (4 mins in this case)
         volumeMounts:
         - name: sf-conf-secure-vol
           mountPath: /confsecure
