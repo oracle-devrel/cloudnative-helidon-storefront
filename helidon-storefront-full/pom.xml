@@ -77,16 +77,6 @@
 	</dependencies>
 
 	<build>
-		<!-- Tell Maven to do variable substitution on the files in the META-INF 
-			this means that the built systems can (for example) transfer the project.version 
-			into the file so it can then be used in your code -->
-		<resources>
-			<resource>
-				<directory>src/main/resources/META-INF</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
