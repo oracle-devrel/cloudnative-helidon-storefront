@@ -19,9 +19,9 @@ env:
     
   # the value of a vaultVariable is the secret-id (in OCI ID format) stored in the OCI Vault service
   # you can then access the value of that secret in your build_spec.yaml commands
-  #vaultVariables:
-  #  GITHUB_USER: ${GITHUB_USER_SECRET_OCID}
-  #  GITHUB_PAT: ${GITHUB_PAT_SECRET_OCID}
+  vaultVariables:
+    OCIR_HOST: Needs your host secrets OCID
+    OCIR_STORAGE_NAMEPACE: Needs your storage namespace OCID
     
   # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
   exportedVariables:
