@@ -26,6 +26,8 @@ env:
   # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
   exportedVariables:
     - STOREFRONT_VERSION
+    - OCIR_HOST
+    - OCIR_STORAGE_NAMEPACE
 
 
 steps:        
@@ -81,15 +83,15 @@ steps:
     name: "Confirm Variables and versions"
     timeoutInSeconds: 10
     command: |
-      echo PATH is 
-      echo $PATH
-      echo JAVA_HOME is
-      echo $JAVA_HOME
-      echo STOREFRONT_VERSION is
-      echo $STOREFRONT_VERSION
-      echo This should be Java 11
+      echo PATH is $PATH
+      echo JAVA_HOME is $JAVA_HOME
+      echo STOREFRONT_VERSION is $STOREFRONT_VERSION
+      echo OCIR_HOST is $OCIR_HOST
+      echo OCIR_STORAGE_NAMEPACE is $OCIR_STORAGE_NAMEPACE
+      echo OCI_PRIMARY_SOURCE_DIR is ${OCI_PRIMARY_SOURCE_DIR}
+      echo This is the Java version, it should be Java 11
       java -version
-      echo maven version
+      echo This is the maven version
       mvn -v 
     onFailure:
       - type: Command
@@ -107,6 +109,7 @@ steps:
       cd ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full
       echo Running maven package - Working in `pwd`
       mvn package  
+      docker images
           
   - type: Command
     name: "Fix resources location in container image"
