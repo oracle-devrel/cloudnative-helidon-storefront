@@ -19,11 +19,14 @@ env:
     
   # the value of a vaultVariable is the secret-id (in OCI ID format) stored in the OCI Vault service
   # you can then access the value of that secret in your build_spec.yaml commands
+  # these are DELIBERATELY not exported to future stages as they may cpontain confidential info
   vaultVariables:
-    OCIR_HOST: Needs your host secrets OCID
-    OCIR_STORAGE_NAMESPACE: Needs your storage namespace OCID
+    OCIR_HOST_VAULT: Needs your host secrets OCID
+    OCIR_STORAGE_NAMESPACE_VAULT: Needs your storage namespace OCID
     
   # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
+  # We want to transfer over the vault values in this case, so create a variable to hold them
+  # and we will copy them over
   exportedVariables:
     - STOREFRONT_VERSION
     - OCIR_HOST
@@ -44,6 +47,11 @@ steps:
       export STOREFRONT_VERSION=`grep "VERSION = " helidon-storefront-full/src/main/java/com/oracle/labs/helidon/storefront/resources/StatusResource.java  | awk '{print $7}' | sed -e 's/"//g' -e s'/;//'`
       echo "STOREFRONT_VERSION: " $STOREFRONT_VERSION
       echo image will be stored to ${OCIR_HOST}/${OCIR_STORAGE_NAMEPACE}/${YOUR_INITIALS}/storefront:${STOREFRONT_VERSION}
+      echo transferring the OCIR_HOST and OCIR_STORAGE_NAMESPACE vault variables
+      export OCIR_HOST=$OCIR_HOST_VAULT
+      echo OCIR_HOST is $OCIR_HOST
+      export OCIR_STORAGE_NAMESPACE=$OCIR_STORAGE_NAMESPACE_VAULT
+      echo OCIR_STORAGE_NAMESPACE is $OCIR_STORAGE_NAMESPACE
     onFailure:
       - type: Command
         timeoutInSeconds: 40
