@@ -21,13 +21,13 @@ env:
   # you can then access the value of that secret in your build_spec.yaml commands
   vaultVariables:
     OCIR_HOST: Needs your host secrets OCID
-    OCIR_STORAGE_NAMEPACE: Needs your storage namespace OCID
+    OCIR_STORAGE_NAMESPACE: Needs your storage namespace OCID
     
   # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
   exportedVariables:
     - STOREFRONT_VERSION
     - OCIR_HOST
-    - OCIR_STORAGE_NAMEPACE
+    - OCIR_STORAGE_NAMESPACE
 
 
 steps:        

@@ -20,7 +20,7 @@ spec:
       containers:
       - name: storefront
         # This needs to match the artifact details is using OCI DevOps
-        image: ${OCIR_HOST}/${OCIR_STORAGE_NAMEPACE}/${YOUR_INITIALS}/storefront:${STOREFRONT_VERSION}
+        image: ${OCIR_HOST}/${OCIR_STORAGE_NAMESPACE}/${YOUR_INITIALS}/storefront:${STOREFRONT_VERSION}
         imagePullPolicy: Always
         ports:
         - name: service-port
