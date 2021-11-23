@@ -1,4 +1,3 @@
-Copyright (c) 2019, 2020, 2021 Oracle and/or its affiliates. All rights reserved.
 
 Lombok is a jar file that contains a bunch of annotation definitions and supporting compile time code
 The key thing it does is to do things automatically that you would otherwise have to do by hand, for 
@@ -14,3 +13,6 @@ Fortunately Lombok has an installation option, locate the Lombok jar file and ru
 UI that (with your permission) allows it to locate and install itself in the IDE's
 
 If you want to download the Lombk jar file by hand you can do so at https://projectlombok.org/
+
+Copyright (c) 2021 Oracle and/or its affiliates. All rights reserved.
+The Universal Permissive License (UPL), Version 1.0
