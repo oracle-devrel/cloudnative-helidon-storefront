@@ -1,0 +1,18 @@
+
+Lombok is a jar file that contains a bunch of annotation definitions and supporting compile time code
+The key thing it does is to do things automatically that you would otherwise have to do by hand, for 
+example using Lomboks @Data annotation on a class will automatically generate getters, setters equals, 
+hashcode and toString method for you. This saves a lot of time and even better as they are automatically 
+generated at compile time as you modify a classes fields all of the methods are automatically updated for 
+you, no more finding something has been forgotten
+
+Lombok is included in the JARs as it's specified in the Mavan pom.xml file, however as Lombok needs to 
+be called at compiler time it also needs to be included in the IDE you're using.
+
+Fortunately Lombok has an installation option, locate the Lombok jar file and run it. It will bring up a 
+UI that (with your permission) allows it to locate and install itself in the IDE's
+
+If you want to download the Lombk jar file by hand you can do so at https://projectlombok.org/
+
+Copyright (c) 2021 Oracle and/or its affiliates. All rights reserved.
+The Universal Permissive License (UPL), Version 1.0

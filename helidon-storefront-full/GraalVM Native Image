@@ -1,0 +1,208 @@
+Copyright (c) 2021 Oracle and/or its affiliates.
+
+The Universal Permissive License (UPL), Version 1.0
+
+Subject to the condition set forth below, permission is hereby granted to any
+person obtaining a copy of this software, associated documentation and/or data
+(collectively the "Software"), free of charge and under any and all copyright
+rights in the Software, and any and all patent rights owned or freely
+licensable by each licensor hereunder covering either (i) the unmodified
+Software as contributed to or provided by such licensor, or (ii) the Larger
+Works (as defined below), to deal in both
+
+(a) the Software, and
+(b) any piece of software and/or hardware listed in the lrgrwrks.txt file if
+one is included with the Software (each a "Larger Work" to which the Software
+is contributed by such licensors),
+
+without restriction, including without limitation the rights to copy, create
+derivative works of, display, perform, and distribute the Software and make,
+use, sell, offer for sale, import, export, have made, and have sold the
+Software and the Larger Work(s), and to sublicense the foregoing rights on
+either these or other terms.
+
+This license is subject to the following condition:
+The above copyright notice and either this complete permission notice or at
+a minimum a reference to the UPL must be included in all copies or
+substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Install graalvm - download from https://github.com/graalvm/graalvm-ce-builds/releases
+gunzip / tar xf it
+on Macos reset quarenteene
+sudo xattr -r -d com.apple.quarantine graalvm-ce-java1<version>/
+cd graalvm-ce-java<version>/Contents/Home
+export JAVA_HOME=`pwd`
+
+check it's got the right version 
+java --version
+
+Should get output incl GraalVM e.g.
+openjdk 11.0.10 2021-01-19
+OpenJDK Runtime Environment GraalVM CE 21.0.0.2 (build 11.0.10+8-jvmci-21.0-b06)
+OpenJDK 64-Bit Server VM GraalVM CE 21.0.0.2 (build 11.0.10+8-jvmci-21.0-b06, mixed mode, sharing)
+
+Install the native-image code
+cd $JAVA_HOME/bin
+list updater options
+./gu available
+Downloading: Component catalog from www.graalvm.org
+ComponentId              Version             Component name                Stability           Origin 
+--------------------------------------------------------------------------------------------------------
+espresso                 21.0.0.2            Java on Truffle               Experimental        github.com
+llvm-toolchain           21.0.0.2            LLVM.org toolchain            Supported           github.com
+native-image             21.0.0.2            Native Image                  Early adopter       github.com
+python                   21.0.0.2            Graal.Python                  Experimental        github.com
+R                        21.0.0.2            FastR                         Experimental        github.com
+ruby                     21.0.0.2            TruffleRuby                   Experimental        github.com
+wasm                     21.0.0.2            GraalWasm                     Experimental        github.com
+
+./gu install native-image
+Downloading: Component catalog from www.graalvm.org
+Processing Component: Native Image
+Downloading: Component native-image: Native Image  from github.com
+Installing new component: Native Image (org.graalvm.native-image, version 21.0.0.2)
+
+now has a native-image file in the bin
+
+set the home var to the native image
+
+export GRAALVM_HOME=$JAVA_HOME
+
+add native image to the path
+
+export PATH=$GRAALVM_HOME/bin:$PATH
+
+IN THE SAME TERMINAL go back to the code directory (e.g. cd $HOME/Development/helidon-kubernetes-labs/helidon-labs-storefront )
+REMEMBER this terminal is setup to use graalVM, other terminals may not be
+
+For the storefront - java stuff only 
+mvn package
+
+run as java bytecode
+java -cp target/libs/*:target/classes  com.oracle.labs.helidon.storefront.Main
+
+note it takes about 3 seconds to be running
+2020.09.15 18:52:17 INFO io.helidon.common.LogConfig !thread!: Logging at initialization configured using classpath: /logging.properties
+2020.09.15 18:52:17 INFO org.jboss.weld.Version !thread!: WELD-000900: 3.1.4 (Final)
+2020.09.15 18:52:17 INFO org.jboss.weld.Bootstrap !thread!: WELD-ENV-000020: Using jandex for bean discovery
+2020.09.15 18:52:17 INFO org.jboss.weld.Bootstrap !thread!: WELD-000101: Transactional services not available. Injection of @Inject UserTransaction not available. Transactional observers will be invoked synchronously.
+2020.09.15 18:52:17 INFO org.jboss.weld.Event !thread!: WELD-000411: Observer method [BackedAnnotatedMethod] private io.helidon.microprofile.openapi.OpenApiCdiExtension.processAnnotatedType(@Observes ProcessAnnotatedType<X>) receives events for all annotated types. Consider restricting events using @WithAnnotations or a generic type with bounds.
+2020.09.15 18:52:17 INFO org.jboss.weld.Event !thread!: WELD-000411: Observer method [BackedAnnotatedMethod] public org.glassfish.jersey.ext.cdi1x.internal.ProcessAllAnnotatedTypes.processAnnotatedType(@Observes ProcessAnnotatedType<?>, BeanManager) receives events for all annotated types. Consider restricting events using @WithAnnotations or a generic type with bounds.
+2020.09.15 18:52:18 WARN org.jboss.weld.Bootstrap !thread!: WELD-000167: Class com.oracle.labs.helidon.storefront.restclients.StockManagerStatus is annotated with @ApplicationScoped but it does not declare an appropriate constructor therefore is not registered as a bean!
+2020.09.15 18:52:18 WARN org.jboss.weld.Bootstrap !thread!: WELD-000167: Class com.oracle.labs.helidon.storefront.restclients.StockManager is annotated with @ApplicationScoped but it does not declare an appropriate constructor therefore is not registered as a bean!
+2020.09.15 18:52:18 WARNING io.helidon.webserver.SocketConfiguration$SocketConfigurationBuilder !thread!: Socket configuration at server.sockets.admin is deprecated. Please use an array with "name" key to define the socket name.
+2020.09.15 18:52:18 INFO io.helidon.tracing.zipkin.ZipkinTracerBuilder !thread!: Creating Zipkin Tracer for 'sf' configured with: http://zipkin:9411/api/v2/spans
+2020.09.15 18:52:18 INFO io.helidon.microprofile.server.ServerCdiExtension !thread!: Registering JAX-RS Application: StorefrontApplication
+2020.09.15 18:52:19 INFO io.helidon.webserver.NettyWebServer !thread!: Channel 'admin' started: [id: 0xc5e8c11e, L:/0:0:0:0:0:0:0:0:9080]
+2020.09.15 18:52:19 INFO io.helidon.webserver.NettyWebServer !thread!: Channel '@default' started: [id: 0xbb3c9112, L:/0:0:0:0:0:0:0:0:8080]
+2020.09.15 18:52:19 INFO io.helidon.microprofile.server.ServerCdiExtension !thread!: Server started on http://localhost:8080 (and all other host addresses) in 2319 milliseconds (since JVM startup).
+2020.09.15 18:52:19 INFO com.oracle.labs.helidon.storefront.Main !thread!: Running on http://localhost:8080
+2020.09.15 18:52:19 INFO io.helidon.common.HelidonFeatures !thread!: Helidon MP 2.0.2 features: [CDI, Config, Fault Tolerance, Health, JAX-RS, Metrics, Open API, Security, Server, Tracing]
+
+
+maven process - produced something that can't run
+https://helidon.io/docs/latest/#/mp/aot/01_introduction
+
+the labs - common must have @Refelected applied to it
+import io.helidon.common.Reflected;
+
+mvn clean package -Pnative-image
+
+run it
+
+./target/storefront
+
+
+Now note it only takes a very short time to be running (less than a second)
+2020.09.17 16:24:22 INFO com.oracle.labs.helidon.storefront.Main !thread!: Starting server
+2020.09.17 16:24:22 INFO io.helidon.common.LogConfig !thread!: Logging at runtime configured using classpath: /logging.properties
+2020.09.17 16:24:22 WARNING io.helidon.webserver.SocketConfiguration$SocketConfigurationBuilder !thread!: Socket configuration at server.sockets.admin is deprecated. Please use an array with "name" key to define the socket name.
+2020.09.17 16:24:22 INFO io.helidon.tracing.zipkin.ZipkinTracerBuilder !thread!: Creating Zipkin Tracer for 'sf' configured with: http://zipkin:9411/api/v2/spans
+2020.09.17 16:24:22 INFO io.helidon.microprofile.server.ServerCdiExtension !thread!: Registering JAX-RS Application: StorefrontApplication
+2020.09.17 16:24:22 INFO io.helidon.webserver.NettyWebServer !thread!: Channel '@default' started: [id: 0x89fde59b, L:/0:0:0:0:0:0:0:0:8080]
+2020.09.17 16:24:22 INFO io.helidon.webserver.NettyWebServer !thread!: Channel 'admin' started: [id: 0x88e0cb6c, L:/0:0:0:0:0:0:0:0:9080]
+2020.09.17 16:24:22 INFO io.helidon.microprofile.server.ServerCdiExtension !thread!: Server started on http://localhost:8080 (and all other host addresses) in 73 milliseconds (since JVM startup).
+2020.09.17 16:24:22 INFO com.oracle.labs.helidon.storefront.Main !thread!: Running on http://localhost:8080
+2020.09.17 16:24:22 INFO io.helidon.common.HelidonFeatures !thread!: Helidon MP 2.0.2 features: [CDI, Config, Fault Tolerance, Health, JAX-RS, Metrics, Open API, REST Client, Security, Server, Tracing]
+
+
+this is so fast we don't get the actuall time
+
+copy the src/main/resources/logging.properties to the helidon-labs-storefront directory (Helidon will give priority to a logging.properties if one exists in the current directory over any in the package) 
+edit the file and add .%1$tL to the date part of the format to add milliseconds to the output
+
+%1$tY.%1$tm.%1$td %1$tH:%1$tM:%1$tS.%1$tL %4$s %3$s !thread!: %5$s%6$s%n
+
+
+now stop the current storefront native-image executable you've been running and start it again
+
+You can see that the startup time is no longer multiple in seconds (2 or 3) but (in the example below) takes 0.49 seconds. This is far faster and worth the compliation overhead.
+2020.09.17 17:11:46.697 INFO io.helidon.common.LogConfig !thread!: Logging at runtime configured using file: /Users/tg13456/Development/helidon-kubernetes-labs/helidon-labs-storefront/logging.properties
+2020.09.17 17:11:46.701 WARNING io.helidon.webserver.SocketConfiguration$SocketConfigurationBuilder !thread!: Socket configuration at server.sockets.admin is deprecated. Please use an array with "name" key to define the socket name.
+2020.09.17 17:11:46.715 INFO io.helidon.tracing.zipkin.ZipkinTracerBuilder !thread!: Creating Zipkin Tracer for 'sf' configured with: http://zipkin:9411/api/v2/spans
+2020.09.17 17:11:46.733 INFO io.helidon.microprofile.server.ServerCdiExtension !thread!: Registering JAX-RS Application: StorefrontApplication
+2020.09.17 17:11:46.750 INFO io.helidon.webserver.NettyWebServer !thread!: Channel 'admin' started: [id: 0x88e0cb6c, L:/0:0:0:0:0:0:0:0:9080]
+2020.09.17 17:11:46.750 INFO io.helidon.webserver.NettyWebServer !thread!: Channel '@default' started: [id: 0x89fde59b, L:/0:0:0:0:0:0:0:0:8080]
+2020.09.17 17:11:46.750 INFO io.helidon.microprofile.server.ServerCdiExtension !thread!: Server started on http://localhost:8080 (and all other host addresses) in 71 milliseconds (since JVM startup).
+2020.09.17 17:11:46.750 INFO com.oracle.labs.helidon.storefront.Main !thread!: Running on http://localhost:8080
+2020.09.17 17:11:46.750 INFO io.helidon.common.HelidonFeatures !thread!: Helidon MP 2.0.2 features: [CDI, Config, Fault Tolerance, Health, JAX-RS, Metrics, Open API, REST Client, Security, Server, Tracing]
+
+
+Also much faster to run.
+
+do an initial request to make sure that the stockmanager has done it's lacy initialization
+
+ curl -i -u jack:password http://localhost:8081/stocklevel
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Thu, 17 Sep 2020 17:28:45 +0100
+connection: keep-alive
+content-length: 184
+
+[{"itemCount":141,"itemName":"Pencil"},{"itemCount":50,"itemName":"Eraser"},{"itemCount":4994,"itemName":"pin"},{"itemCount":100,"itemName":"Book"},{"itemCount":3142,"itemName":"Pie"}]macbook-pro:helidon-labs-storefront tg13456$ 
+
+
+Using the origional java version - stop the native-image if it's running, then start storefront in eclipse.
+
+
+ time curl -i -u jack:password http://localhost:8080/store/stocklevel
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Thu, 17 Sep 2020 17:25:37 +0100
+connection: keep-alive
+content-length: 184
+
+[{"itemCount":141,"itemName":"Pencil"},{"itemCount":50,"itemName":"Eraser"},{"itemCount":4994,"itemName":"pin"},{"itemCount":100,"itemName":"Book"},{"itemCount":3142,"itemName":"Pie"}]
+real	0m0.683s
+user	0m0.004s
+sys	0m0.006s
+macbook-pro:helidon-labs-storefront tg13456$  time curl -i -u jack:password http://localhost:8080/store/stocklevel
+HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Thu, 17 Sep 2020 17:25:59 +0100
+connection: keep-alive
+content-length: 184
+
+[{"itemCount":141,"itemName":"Pencil"},{"itemCount":50,"itemName":"Eraser"},{"itemCount":4994,"itemName":"pin"},{"itemCount":100,"itemName":"Book"},{"itemCount":3142,"itemName":"Pie"}]
+real	0m0.154s
+user	0m0.004s
+sys	0m0.006s
+
+Need to check this bit, it's way bigger !
+
+The side of the executable has also reduced considerably
+It's larger than the jar files
+du -sm target/libs/
+19	target/libs/
+
+du -sm target/storefront
+92	target/storefront
+
