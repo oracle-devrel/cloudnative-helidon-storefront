@@ -86,6 +86,3 @@ kubectl get pods                             # Verify connectivity to cluster
 kubectl create -f app.yaml               # Deploy application
 kubectl get service stockmanager  # Verify deployed service
 ```
-
-Copyright (c) 2021 Oracle and/or its affiliates. All rights reserved.
-The Universal Permissive License (UPL), Version 1.0
