@@ -1,3 +1,5 @@
+Copyright (c) 2019, 2020, 2021 Oracle and/or its affiliates. All rights reserved.
+
 Lombok is a jar file that contains a bunch of annotation definitions and supporting compile time code
 The key thing it does is to do things automatically that you would otherwise have to do by hand, for 
 example using Lomboks @Data annotation on a class will automatically generate getters, setters equals, 

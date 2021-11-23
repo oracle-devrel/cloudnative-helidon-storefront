@@ -22,6 +22,7 @@
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
 		<version.lombok>1.18.22</version.lombok>
+		<sonar.exclusions>**/*.java</sonar.exclusions>
 	</properties>
 	<groupId>com.oracle.labs.helidon</groupId>
 	<artifactId>storefront</artifactId>

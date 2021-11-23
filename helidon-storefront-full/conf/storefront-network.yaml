@@ -1,17 +1,3 @@
-server:
-  port: 8080
-  host: "0.0.0.0"
-  sockets:
-    admin:
-      port: 9080
-      bind-address: "0.0.0.0"
-
-metrics:
-  routing: "admin"
-
-health:
-  routing: "admin"
-  
 #
 # Copyright (c) 2019, 2020, 2021 Oracle and/or its affiliates. All rights reserved.
 #
@@ -27,3 +13,17 @@ health:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+server:
+  port: 8080
+  host: "0.0.0.0"
+  sockets:
+    admin:
+      port: 9080
+      bind-address: "0.0.0.0"
+
+metrics:
+  routing: "admin"
+
+health:
+  routing: "admin"
+  

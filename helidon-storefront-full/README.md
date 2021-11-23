@@ -1,5 +1,4 @@
-
-# Helidon Quickstart MP Example
+Copyright (c) 2019, 2020, 2021 Oracle and/or its affiliates. All rights reserved.
 
 This example implements a simple Hello World REST service using MicroProfile
 
