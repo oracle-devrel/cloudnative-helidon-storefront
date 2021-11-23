@@ -1,0 +1,6 @@
+javax.sql.DataSource.stockmanagerDataSource.dataSourceClassName=oracle.jdbc.pool.OracleDataSource 
+javax.sql.DataSource.stockmanagerDataSource.dataSource.url=jdbc:oracle:thin:@tgdemo_high?TNS_ADMIN=./Wallet_ATP 
+javax.sql.DataSource.stockmanagerDataSource.dataSource.user=HelidonLabs
+javax.sql.DataSource.stockmanagerDataSource.dataSource.password=H3lid0n_Labs
+hibernate.dialect=org.hibernate.dialect.Oracle10gDialect
+hibernate.hbm2ddl.auto=update
