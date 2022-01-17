@@ -68,10 +68,10 @@ steps:
       cd ~
       mkdir InstalledSoftware
       cd InstalledSoftware
-      wget -q https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz
-      tar -xf openjdk-11+28_linux-x64_bin.tar.gz
+      wget -q https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.tar.gz
+      tar xf *tar.gz
       ls -l
-      export JAVA_HOME=~/InstalledSoftware/jdk-11
+      export JAVA_HOME=`echo -n ~/InstalledSoftware/jdk-*`
       export PATH=$JAVA_HOME/bin:$PATH
       echo Path is
       echo $PATH

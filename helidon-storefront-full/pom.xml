@@ -35,9 +35,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>io.helidon.applications</groupId>
@@ -76,13 +74,19 @@ SOFTWARE. -->
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<scope>test</scope>
-		</dependency><!-- Utilities -->
+		</dependency> <!-- Utilities -->
 		<!-- Lombok does the auto method creation -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>${version.lombok}</version>
 			<scope>provided</scope>
+		</dependency>
+		<!-- not quite sure why it fails to run withouh this entry, given this package is imported elsewhere, 
+          but it seems to fail if this isn't present on my system at least -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
 		</dependency>
 		<!-- SLF4J is a logging facade that let's us change the actual logger used 
 			under the covers without changing our code, slf4j-jdk14 is for output to 
