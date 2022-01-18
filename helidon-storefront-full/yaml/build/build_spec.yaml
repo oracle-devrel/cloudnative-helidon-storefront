@@ -62,7 +62,7 @@ steps:
         runAs: root
 
   - type: Command
-    name: "Install local JDK11"
+    name: "Install local JDK17"
     timeoutInSeconds: 10000
     command: |
       cd ~
@@ -70,6 +70,7 @@ steps:
       cd InstalledSoftware
       wget -q https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.tar.gz
       tar xf *tar.gz
+      rm *tar.gz
       ls -l
       export JAVA_HOME=`echo -n ~/InstalledSoftware/jdk-*`
       export PATH=$JAVA_HOME/bin:$PATH
