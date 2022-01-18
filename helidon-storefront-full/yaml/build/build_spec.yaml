@@ -98,7 +98,7 @@ steps:
       echo OCIR_HOST is $OCIR_HOST
       echo OCIR_STORAGE_NAMEPACE is $OCIR_STORAGE_NAMEPACE
       echo OCI_PRIMARY_SOURCE_DIR is ${OCI_PRIMARY_SOURCE_DIR}
-      echo This is the Java version, it should be Java 11
+      echo This is the Java version, it should be Java 17
       java -version
       echo This is the maven version
       mvn -v 
