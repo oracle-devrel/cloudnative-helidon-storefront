@@ -124,9 +124,9 @@ public class StorefrontResource {
 	// given is used directly and not added to the class
 	@Metered(name = "listAllStockMeter", absolute = true)
 	@Operation(summary = "List stock items", description = "Returns a list of all of the stock items currently held in the database (the list may be empty if there are no items)")
-	@APIResponse(description = "A set of ItemDetails representing the current data in the database", responseCode = "200", content = @Content(schema = @Schema(implementation = ItemDetails.class, type = SchemaType.ARRAY, example = "[{\"itemCount\": 10, \"itemName\": \"Pencil\"},"
-			+ "{\"itemCount\": 50, \"itemName\": \"Eraserl\"}," + "{\"itemCount\": 4600, \"itemName\": \"Pin\"},"
-			+ "{\"itemCount\": 100, \"itemName\": \"Book\"}]")))
+	@APIResponse(description = "A set of ItemDetails representing the current data in the database", responseCode = "200", content = @Content(schema = @Schema(name = "ItemDetails", implementation = ItemDetails.class, type = SchemaType.ARRAY), example = "[{\"itemCount\": 10, \"itemName\": \"Pencil\"},"
+			+ "{\"itemCount\": 50, \"itemName\": \"Eraser\"}," + "{\"itemCount\": 4600, \"itemName\": \"Pin\"},"
+			+ "{\"itemCount\": 100, \"itemName\": \"Book\"}]"))
 	public Collection<ItemDetails> listAllStock() {
 		// log the request
 		log.info("Requesting listing of all stock");
@@ -169,12 +169,12 @@ public class StorefrontResource {
 	 */
 	@Fallback(StorefrontFallbackHandler.class)
 	@Operation(summary = "Reserves a number of stock items", description = "reserves a number of stock items in the database. The number of stock items being reserved must be greater than the defined minimum change")
-	@APIResponse(description = "The updated stock details for the item", responseCode = "200", content = @Content(schema = @Schema(implementation = ItemDetails.class, example = "{\"itemCount\": 10, \"itemName\": \"Pencil\"}")))
+	@APIResponse(description = "The updated stock details for the item", responseCode = "200", content = @Content(schema = @Schema(name = "ItemDetails", implementation = ItemDetails.class), example = "{\"itemCount\": 10, \"itemName\": \"Pencil\"}"))
 	@APIResponse(description = "The requested item does not exist", responseCode = "404")
 	@APIResponse(description = "The requested change does not meet the minimum level required for the change (i.e. is <= the minimumChange value)", responseCode = "406")
 	@APIResponse(description = "There are not enough of the requested item to fulfil your request", responseCode = "409")
 	public ItemDetails reserveStockItem(
-			@RequestBody(description = "The details of the item being requested", required = true, content = @Content(schema = @Schema(implementation = ItemRequest.class, example = "{\"requestedItem\",\"Pin\",\"requestedCount\",5}"))) ItemRequest itemRequest)
+			@RequestBody(description = "The details of the item being requested", required = true, content = @Content(schema = @Schema(name = "ItemRequest", implementation = ItemRequest.class), example = "{\"requestedItem\",\"Pencil\",\"requestedCount\",5}")) ItemRequest itemRequest)
 			throws MinimumChangeException, UnknownItemException, NotEnoughItemsException {
 		log.info("Requesting the reservation of " + itemRequest.getRequestedCount() + " items of "
 				+ itemRequest.getRequestedItem());
