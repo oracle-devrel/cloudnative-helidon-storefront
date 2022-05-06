@@ -61,10 +61,13 @@ import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.enums.SecuritySchemeType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import com.oracle.labs.helidon.storefront.data.ItemDetails;
@@ -96,7 +99,8 @@ import lombok.extern.slf4j.Slf4j;
 //Have Lombok create a logger and no args constructor for us
 @Slf4j
 @NoArgsConstructor
-
+@SecurityScheme(securitySchemeName = "httpBasic", type = SecuritySchemeType.HTTP, scheme = "Basic")
+@SecurityRequirement(name = "httpBasic")
 public class StorefrontResource {
 
 	private static final JsonBuilderFactory JSON = Json.createBuilderFactory(Collections.emptyMap());
