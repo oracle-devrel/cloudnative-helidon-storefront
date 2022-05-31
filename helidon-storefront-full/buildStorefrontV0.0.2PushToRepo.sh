@@ -5,7 +5,7 @@ cat StatusResource.java | sed s/0.0.1/0.0.2/ > StatusResourcev2.java
 mv StatusResourcev2.java src/main/java/com/oracle/labs/helidon/storefront/resources/StatusResource.java
 rm StatusResource.java
 . ./repoStorefrontConfig.sh
-mvn package
+mvn clean package
 echo Resetting StatusResource version
 mv src/main/java/com/oracle/labs/helidon/storefront/resources/StatusResource.java .
 cat StatusResource.java | sed s/0.0.2/0.0.1/ > StatusResourcev1.java

@@ -40,14 +40,16 @@ SOFTWARE. -->
 	<parent>
 		<groupId>io.helidon.applications</groupId>
 		<artifactId>helidon-mp</artifactId>
-		<version>2.4.1</version>
+		<version>2.5.0</version>
 	</parent>
 	<properties>
 		<mainClass>com.oracle.labs.helidon.storefront.Main</mainClass>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
-		<version.lombok>1.18.22</version.lombok>
+		<version.lombok>1.18.24</version.lombok>
+		<version.jib>3.2.1</version.jib>
 		<sonar.skip>true</sonar.skip>
+		<container.image>ghcr.io/graalvm/graalvm-ce:ol8-java17-22.1.0</container.image>
 	</properties>
 	<groupId>com.oracle.labs.helidon</groupId>
 	<artifactId>storefront</artifactId>
@@ -131,21 +133,10 @@ SOFTWARE. -->
 			<plugin>
 				<groupId>com.google.cloud.tools</groupId>
 				<artifactId>jib-maven-plugin</artifactId>
-				<version>3.1.4</version>
+				<version>${version.jib}</version>
 				<configuration>
-					<!-- Use the Graal community edition JVM as it'd got better GC and JITC 
-						use a bigger base than the distroless java jib uses by defautso we can actually 
-						connect to it to fix some of the problems when jib puts things like the jandex.idx 
-						file in /resources/META-INF which CDI and WELD can't handle, the distroless 
-						base is only java, and we need a shell to run things like cp and rm. Alpine 
-						jre only is a lot smaller than the full openjdk:8 image, but does support 
-						cp and rm, however it doesn't have all of the Unix type tools in it, so if 
-						some are missing go for openjdk:8 here -->
 					<from>
-						<!-- <image>openjdk:11-jre-alpine</image> OR <image>openjdk:11-jre-slim</image> -->
-						<!-- <image>openjdk:11</image> -->
-						<image>ghcr.io/graalvm/graalvm-ce:java17-21</image>
-						<!--<image>openjdk:17.0.1-jdk</image>-->
+						<image>${container.image}</image>
 					</from>
 					<to>
 						<image>jib-${project.artifactId}</image>
