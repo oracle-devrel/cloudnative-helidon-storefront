@@ -35,7 +35,6 @@
 app:
   storename: "My Shop"
   minimumchange: 2
-  writebillingentries: false
 
 #tracing:
 #  service: "storefront"
