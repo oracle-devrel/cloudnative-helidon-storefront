@@ -74,6 +74,7 @@ import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import com.oracle.labs.helidon.storefront.data.BillingEntry;
+import com.oracle.labs.helidon.storefront.data.BillingEntryResponse;
 import com.oracle.labs.helidon.storefront.data.ItemDetails;
 import com.oracle.labs.helidon.storefront.data.ItemRequest;
 import com.oracle.labs.helidon.storefront.data.MinimumChange;
@@ -241,8 +242,11 @@ public class StorefrontResource {
 		ItemDetails updatedItemDetails = stockManager.setStockItemLevel(itemRequest.getRequestedItem(), newItemCount);
 		if (writeBillingEntries) {
 			try {
-				billing.postBillingEntry(new BillingEntry(securityContext.getUserPrincipal().getName(),
-						itemDetails.getItemName(), itemRequest.getRequestedCount()));
+				log.info("About to write billing record");
+				BillingEntryResponse ber = billing
+						.postBillingEntry(new BillingEntry(securityContext.getUserPrincipal().getName(),
+								itemDetails.getItemName(), itemRequest.getRequestedCount()));
+				log.info("Billing record respoinse is " + ber);
 			} catch (Exception e) {
 				log.warn("Problem writing billind entry " + e.getLocalizedMessage());
 			}
