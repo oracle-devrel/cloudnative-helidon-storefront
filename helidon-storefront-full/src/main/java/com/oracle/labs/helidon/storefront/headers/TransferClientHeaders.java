@@ -50,23 +50,8 @@ import lombok.extern.slf4j.Slf4j;
 public class TransferClientHeaders implements ClientHeadersFactory {
 	// this list comes from the Java 8 source code of
 	// sun.net.www.protocol.http.HttpURLConnection.java
-	private static final String[] restrictedHeaders = {
-			/* Restricted by XMLHttpRequest2 */
-			// "Accept-Charset",
-			// "Accept-Encoding",
-			"Access-Control-Request-Headers", "Access-Control-Request-Method", "Connection", /* close is allowed */
-			"Content-Length",
-			// "Cookie",
-			// "Cookie2",
-			"Content-Transfer-Encoding",
-			// "Date",
-			// "Expect",
-			"Host", "Keep-Alive", "Origin",
-			// "Referer",
-			// "TE",
-			"Trailer", "Transfer-Encoding", "Upgrade",
-			// "User-Agent",
-			"Via" };
+	private static final String[] restrictedHeaders = { "Connection", "Content-Length", "Expect", "Host", "Upgrade",
+			"connection", "content-length", "expect", "host", "upgrade" };
 
 	@Override
 	public MultivaluedMap<String, String> update(MultivaluedMap<String, String> incomingHeaders,
