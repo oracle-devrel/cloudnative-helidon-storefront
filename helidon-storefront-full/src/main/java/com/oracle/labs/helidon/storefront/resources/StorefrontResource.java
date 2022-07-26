@@ -250,6 +250,8 @@ public class StorefrontResource {
 			} catch (Exception e) {
 				log.warn("Problem writing billind entry " + e.getLocalizedMessage());
 			}
+		} else {
+			log.info("Billing recording disabled");
 		}
 		// log the result
 		log.info("The reservation of " + itemRequest.getRequestedCount() + " items of " + itemRequest.getRequestedItem()
