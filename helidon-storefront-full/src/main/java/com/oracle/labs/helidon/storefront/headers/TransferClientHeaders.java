@@ -37,6 +37,8 @@ SOFTWARE.
 
 package com.oracle.labs.helidon.storefront.headers;
 
+import java.util.stream.Stream;
+
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 
@@ -46,6 +48,25 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class TransferClientHeaders implements ClientHeadersFactory {
+	// this list comes from the Java 8 source code of
+	// sun.net.www.protocol.http.HttpURLConnection.java
+	private static final String[] restrictedHeaders = {
+			/* Restricted by XMLHttpRequest2 */
+			// "Accept-Charset",
+			// "Accept-Encoding",
+			"Access-Control-Request-Headers", "Access-Control-Request-Method", "Connection", /* close is allowed */
+			"Content-Length",
+			// "Cookie",
+			// "Cookie2",
+			"Content-Transfer-Encoding",
+			// "Date",
+			// "Expect",
+			"Host", "Keep-Alive", "Origin",
+			// "Referer",
+			// "TE",
+			"Trailer", "Transfer-Encoding", "Upgrade",
+			// "User-Agent",
+			"Via" };
 
 	@Override
 	public MultivaluedMap<String, String> update(MultivaluedMap<String, String> incomingHeaders,
@@ -54,7 +75,8 @@ public class TransferClientHeaders implements ClientHeadersFactory {
 		log.info("Provided outgoing headers - " + outgoingHeaders);
 		// we need to remove some headers as by default they are restricted
 		MultivaluedMap<String, String> sanitisedIncomingHeaders = new MultivaluedHashMap<>(incomingHeaders);
-		sanitisedIncomingHeaders.remove("Host");
+		// remove all of ther restricted headers
+		Stream.of(restrictedHeaders).forEach(restrictedHeader -> sanitisedIncomingHeaders.remove(restrictedHeader));
 		// Helidon may have handled the Authorization for us.
 		sanitisedIncomingHeaders.remove("Authorization");
 		// Need a multi valued map as a header can be repeated multiple times.
