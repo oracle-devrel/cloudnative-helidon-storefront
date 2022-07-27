@@ -34,44 +34,32 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
+package com.oracle.labs.helidon.storefront.data;
 
-package com.oracle.labs.helidon.storefront.headers;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
-import java.util.stream.Stream;
+import io.helidon.common.Reflected;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
-
-import org.eclipse.microprofile.rest.client.ext.ClientHeadersFactory;
-
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
-public class TransferClientHeaders implements ClientHeadersFactory {
-	// this list comes from the Java 8 source code of
-	// sun.net.www.protocol.http.HttpURLConnection.java
-	private static final String[] restrictedHeaders = { "Connection", "Content-Length", "Expect", "Host", "Upgrade",
-			"connection", "content-length", "expect", "host", "upgrade" };
-
-	@Override
-	public MultivaluedMap<String, String> update(MultivaluedMap<String, String> incomingHeaders,
-			MultivaluedMap<String, String> outgoingHeaders) {
-		log.info("Incoming headers - " + incomingHeaders);
-		log.info("Provided outgoing headers - " + outgoingHeaders);
-		// we need to remove some headers as by default they are restricted
-		MultivaluedMap<String, String> sanitisedIncomingHeaders = new MultivaluedHashMap<>(incomingHeaders);
-		// remove all of ther restricted headers
-		Stream.of(restrictedHeaders).forEach(restrictedHeader -> sanitisedIncomingHeaders.remove(restrictedHeader));
-		// Helidon may have handled the Authorization for us.
-		sanitisedIncomingHeaders.remove("Authorization");
-		// Need a multi valued map as a header can be repeated multiple times.
-		MultivaluedMap<String, String> transferredHeaders = new MultivaluedHashMap<>();
-		// add all of the headers that have already been setup for us
-		transferredHeaders.putAll(sanitisedIncomingHeaders);
-		// now add all of the incoming ones
-		transferredHeaders.putAll(outgoingHeaders);
-		log.info("Combined headers - " + transferredHeaders);
-		// return the new map
-		return transferredHeaders;
-	}
+@Reflected // this tells the Helidon native-image support to include this as a class that
+			// can be accessed via reflection
+@Data // Tells Lombok to create getters and setters, equals and hashcode
+@NoArgsConstructor // Tells Lombok to create a constructor with no args (needed for the JSCON
+					// unmarshalling process to work)
+@AllArgsConstructor // Tells Lombok to create a constructor with all the args (makes life easier
+					// creating instances)
+//Tells Helidon the details of this object for the OpenAPI delf documenting class
+@Schema(name = "BillingInfo", description = "Details of the billing data", example = "{\"billingActive\": true, \"recordsWrittenSinceStartup\": 10, \"billingFileSize\": 1024}")
+public class BillingInfo {
+	// Tells helidon OpenAPI support what the field is
+	@Schema(required = true, description = "If there is a billing file with data being written", example = "false")
+	private Boolean billingActive;
+	// Tells helidon OpenAPI support what the field is
+	@Schema(required = true, description = "The number of billing entries written since the service started", example = "10")
+	private Integer recordsWrittenSinceStartup;
+	// Tells helidon OpenAPI support what the field is
+	@Schema(required = true, description = "The current size of the billing file", example = "1024")
+	private Long billingFileSize;
 }

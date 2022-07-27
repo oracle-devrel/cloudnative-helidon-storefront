@@ -51,9 +51,12 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.metrics.annotation.Counted;
@@ -70,6 +73,8 @@ import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement
 import org.eclipse.microprofile.openapi.annotations.security.SecurityScheme;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
+import com.oracle.labs.helidon.storefront.data.BillingEntry;
+import com.oracle.labs.helidon.storefront.data.BillingEntryResponse;
 import com.oracle.labs.helidon.storefront.data.ItemDetails;
 import com.oracle.labs.helidon.storefront.data.ItemRequest;
 import com.oracle.labs.helidon.storefront.data.MinimumChange;
@@ -77,6 +82,7 @@ import com.oracle.labs.helidon.storefront.exceptions.MinimumChangeException;
 import com.oracle.labs.helidon.storefront.exceptions.NotEnoughItemsException;
 import com.oracle.labs.helidon.storefront.exceptions.UnknownItemException;
 import com.oracle.labs.helidon.storefront.resources.fallback.StorefrontFallbackHandler;
+import com.oracle.labs.helidon.storefront.restclients.BillingService;
 import com.oracle.labs.helidon.storefront.restclients.StockManager;
 
 import io.helidon.security.annotations.Authenticated;
@@ -111,6 +117,14 @@ public class StorefrontResource {
 	@Inject
 	@RestClient
 	private StockManager stockManager = null;
+
+	@Inject
+	@RestClient
+	private BillingService billing = null;
+
+	@Inject
+	@ConfigProperty(name = "app.writebillingentries", defaultValue = "false")
+	Boolean writeBillingEntries;
 
 	@GET
 	@Path("/stocklevel")
@@ -178,7 +192,8 @@ public class StorefrontResource {
 	@APIResponse(description = "The requested change does not meet the minimum level required for the change (i.e. is <= the minimumChange value)", responseCode = "406")
 	@APIResponse(description = "There are not enough of the requested item to fulfil your request", responseCode = "409")
 	public ItemDetails reserveStockItem(
-			@RequestBody(description = "The details of the item being requested", required = true, content = @Content(schema = @Schema(name = "ItemRequest", implementation = ItemRequest.class), example = "{\"requestedItem\",\"Pencil\",\"requestedCount\",5}")) ItemRequest itemRequest)
+			@RequestBody(description = "The details of the item being requested", required = true, content = @Content(schema = @Schema(name = "ItemRequest", implementation = ItemRequest.class), example = "{\"requestedItem\",\"Pencil\",\"requestedCount\",5}")) ItemRequest itemRequest,
+			@Context SecurityContext securityContext)
 			throws MinimumChangeException, UnknownItemException, NotEnoughItemsException {
 		log.info("Requesting the reservation of " + itemRequest.getRequestedCount() + " items of "
 				+ itemRequest.getRequestedItem());
@@ -225,6 +240,19 @@ public class StorefrontResource {
 				+ " is being sent to the database");
 		// update the DB and get the result back (the updated info)
 		ItemDetails updatedItemDetails = stockManager.setStockItemLevel(itemRequest.getRequestedItem(), newItemCount);
+		if (writeBillingEntries) {
+			try {
+				log.info("About to write billing record");
+				BillingEntryResponse ber = billing
+						.postBillingEntry(new BillingEntry(securityContext.getUserPrincipal().getName(),
+								itemDetails.getItemName(), itemRequest.getRequestedCount()));
+				log.info("Billing record respoinse is " + ber);
+			} catch (Exception e) {
+				log.warn("Problem writing billind entry " + e.getLocalizedMessage());
+			}
+		} else {
+			log.info("Billing recording disabled");
+		}
 		// log the result
 		log.info("The reservation of " + itemRequest.getRequestedCount() + " items of " + itemRequest.getRequestedItem()
 				+ " suceeded, the stock manager reports " + updatedItemDetails.getItemCount() + " remain");

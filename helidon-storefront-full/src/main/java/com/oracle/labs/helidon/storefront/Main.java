@@ -100,6 +100,7 @@ public final class Main {
 		List<Supplier<? extends ConfigSource>> configSourcesToScan = new ArrayList<>(5);
 		configSourcesToScan.add(ConfigSources.file("conf/storefront-config.yaml")
 				.pollingStrategy(PollingStrategies.regular(Duration.ofSeconds(5))).optional().build());
+		configSourcesToScan.add(ConfigSources.file("conf/storefront-billing.yaml").optional().build());
 		configSourcesToScan.add(ConfigSources.file("conf/storefront-network.yaml").optional().build());
 		configSourcesToScan.add(ConfigSources.file("confsecure/storefront-security.yaml").build());
 		configSourcesToScan.add(ConfigSources.classpath("META-INF/microprofile-config.properties").build());
