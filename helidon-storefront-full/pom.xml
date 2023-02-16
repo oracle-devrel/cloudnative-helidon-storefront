@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright (c) 2021 Oracle and/or its affiliates.
+<!-- Copyright (c) 2023 Oracle and/or its affiliates.
 
 The Universal Permissive License (UPL), Version 1.0
 
@@ -37,16 +37,18 @@ SOFTWARE. -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>io.helidon.applications</groupId>
-		<artifactId>helidon-mp</artifactId>
-		<version>2.5.0</version>
-	</parent>
+	
+    <parent>
+        <groupId>io.helidon.applications</groupId>
+        <artifactId>helidon-mp</artifactId>
+        <version>3.1.1</version>
+        <relativePath/>
+    </parent>
 	<properties>
 		<mainClass>com.oracle.labs.helidon.storefront.Main</mainClass>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
-		<version.lombok>1.18.24</version.lombok>
+		<version.lombok>1.18.26</version.lombok>
 		<version.jib>3.2.1</version.jib>
 		<sonar.skip>true</sonar.skip>
 		<container.image>ghcr.io/graalvm/graalvm-ce:ol8-java17-22.1.0</container.image>

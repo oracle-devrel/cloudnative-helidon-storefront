@@ -39,11 +39,10 @@ package com.oracle.labs.helidon.storefront.headers;
 
 import java.util.stream.Stream;
 
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
-
 import org.eclipse.microprofile.rest.client.ext.ClientHeadersFactory;
 
+import jakarta.ws.rs.core.MultivaluedHashMap;
+import jakarta.ws.rs.core.MultivaluedMap;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

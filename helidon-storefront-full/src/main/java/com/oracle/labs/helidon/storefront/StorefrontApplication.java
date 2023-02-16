@@ -39,16 +39,16 @@ package com.oracle.labs.helidon.storefront;
 
 import java.util.Set;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
-
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
 import org.eclipse.microprofile.openapi.annotations.info.Info;
 
 import com.oracle.labs.helidon.storefront.resources.ConfigurationResource;
 import com.oracle.labs.helidon.storefront.resources.StatusResource;
 import com.oracle.labs.helidon.storefront.resources.StorefrontResource;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.ApplicationPath;
+import jakarta.ws.rs.core.Application;
 
 /**
  * Simple Application that produces a greeting message.

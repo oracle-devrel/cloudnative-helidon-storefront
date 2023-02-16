@@ -38,10 +38,6 @@ package com.oracle.labs.helidon.storefront.health;
 
 import java.net.URISyntaxException;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.json.JsonObject;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
@@ -50,6 +46,9 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import com.oracle.labs.helidon.storefront.restclients.StockManagerStatus;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 
 /**

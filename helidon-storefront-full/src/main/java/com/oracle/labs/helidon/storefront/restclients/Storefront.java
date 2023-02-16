@@ -39,13 +39,6 @@ package com.oracle.labs.helidon.storefront.restclients;
 
 import java.util.Collection;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -58,6 +51,13 @@ import com.oracle.labs.helidon.storefront.data.ItemRequest;
 import com.oracle.labs.helidon.storefront.exceptions.MinimumChangeException;
 import com.oracle.labs.helidon.storefront.exceptions.NotEnoughItemsException;
 import com.oracle.labs.helidon.storefront.exceptions.UnknownItemException;
+
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 /**
  * This is provided as an example interface for the StorefrontResource if you
