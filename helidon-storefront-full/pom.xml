@@ -51,7 +51,7 @@ SOFTWARE. -->
 		<version.lombok>1.18.26</version.lombok>
 		<version.jib>3.3.1</version.jib>
 		<sonar.skip>true</sonar.skip>
-		<container.image>ghcr.io/graalvm/graalvm-ce:ol8-java17-22.3.1</container.image>
+		<container.image>ghcr.io/graalvm/graalvm-ce:ol9-java17-22.3.1</container.image>
 	</properties>
 	<groupId>com.oracle.labs.helidon</groupId>
 	<artifactId>storefront</artifactId>
