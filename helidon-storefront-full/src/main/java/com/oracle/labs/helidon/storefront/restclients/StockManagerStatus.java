@@ -36,13 +36,13 @@ SOFTWARE.
  */
 package com.oracle.labs.helidon.storefront.restclients;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.json.JsonObject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.json.JsonObject;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 // don't specify a config key here, this means that the FQCN is used
 @RegisterRestClient

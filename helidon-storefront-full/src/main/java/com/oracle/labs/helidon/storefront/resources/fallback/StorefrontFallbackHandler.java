@@ -44,16 +44,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.enterprise.context.Dependent;
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonBuilderFactory;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 import org.eclipse.microprofile.faulttolerance.ExecutionContext;
 import org.eclipse.microprofile.faulttolerance.FallbackHandler;
 
@@ -62,6 +52,15 @@ import com.oracle.labs.helidon.storefront.exceptions.MinimumChangeException;
 import com.oracle.labs.helidon.storefront.exceptions.NotEnoughItemsException;
 import com.oracle.labs.helidon.storefront.exceptions.UnknownItemException;
 
+import jakarta.enterprise.context.Dependent;
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonBuilderFactory;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import lombok.extern.slf4j.Slf4j;
 
 @Dependent
