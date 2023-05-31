@@ -1,0 +1,181 @@
+# Copyright (c) 2021 Oracle and/or its affiliates.
+# 
+# The Universal Permissive License (UPL), Version 1.0
+# 
+# Subject to the condition set forth below, permission is hereby granted to any
+# person obtaining a copy of this software, associated documentation and/or data
+# (collectively the "Software"), free of charge and under any and all copyright
+# rights in the Software, and any and all patent rights owned or freely
+# licensable by each licensor hereunder covering either (i) the unmodified
+# Software as contributed to or provided by such licensor, or (ii) the Larger
+# Works (as defined below), to deal in both
+# 
+# (a) the Software, and
+# (b) any piece of software and/or hardware listed in the lrgrwrks.txt file if
+# one is included with the Software (each a "Larger Work" to which the Software
+# is contributed by such licensors),
+# without restriction, including without limitation the rights to copy, create
+# derivative works of, display, perform, and distribute the Software and make,
+# use, sell, offer for sale, import, export, have made, and have sold the
+# Software and the Larger Work(s), and to sublicense the foregoing rights on
+# either these or other terms.
+# 
+# This license is subject to the following condition:
+# The above copyright notice and either this complete permission notice or at
+# a minimum a reference to the UPL must be included in all copies or
+# substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+version: 0.1
+component: build
+timeoutInSeconds: 6000
+runAs: root
+shell: bash
+
+# For this to work the folloing params need to be set in the pipeline
+# ignore for now GITHUB_PATH_SECRET_OCID - the OCID of the vault secret containing the users github parsonal access token
+# ignore for now GITHUB_USERNAME = the OCID of the vault secret contining the users github usename
+# OCIR_HOST - The hostname part of the image tags for the image registry to use 
+# OCIR_STORAGE_NAMEPACE - The tenancy storage namespace part of the image tag
+
+env:
+  # these are local variables to the build config, we need to declare them here so thet will follow on in subsequent build stages
+  # Note that PATH seems to be automatically added to the list of variables who's value is preserved across commands
+  variables:
+   # HOLDINGPATH: "empty"
+   JAVA_HOME: "javahome"
+    
+  # the value of a vaultVariable is the secret-id (in OCI ID format) stored in the OCI Vault service
+  # you can then access the value of that secret in your build_spec.yaml commands
+  # these are DELIBERATELY not exported to future stages as they may cpontain confidential info
+  vaultVariables:
+    OCIR_HOST_VAULT: ocid1.vaultsecret.oc1.iad.amaaaaaaj6x6wyqarj7rmeswgbf2p3w4i7boprzapuk6wrrolrersepq4efa
+    OCIR_STORAGE_NAMESPACE_VAULT: ocid1.vaultsecret.oc1.iad.amaaaaaaj6x6wyqav73uuqhtopfz5wuozmnavsnj254t5nyizuvutskazp6q
+    
+  # exportedVariables are made available to use as parameters in sucessor Build Pipeline stages
+  # We want to transfer over the vault values in this case, so create a variable to hold them
+  # and we will copy them over
+  exportedVariables:
+    - STOREFRONT_VERSION
+    - OCIR_HOST
+    - OCIR_STORAGE_NAMESPACE
+
+
+steps:        
+  - type: Command
+    name: "Extract Export variables"
+    timeoutInSeconds: 10
+    command: |
+      echo Path is
+      echo $PATH
+      echo JAVA_HOME is
+      echo $JAVA_HOME
+      cd ${OCI_PRIMARY_SOURCE_DIR}
+      echo Extracting export variables - Working in `pwd`
+      export STOREFRONT_VERSION=`grep "VERSION = " helidon-storefront-full/src/main/java/com/oracle/labs/helidon/storefront/resources/StatusResource.java  | awk '{print $7}' | sed -e 's/"//g' -e s'/;//'`
+      echo "STOREFRONT_VERSION: " $STOREFRONT_VERSION
+      echo transferring the OCIR_HOST and OCIR_STORAGE_NAMESPACE vault variables
+      export OCIR_HOST=$OCIR_HOST_VAULT
+      echo OCIR_HOST is $OCIR_HOST
+      export OCIR_STORAGE_NAMESPACE=$OCIR_STORAGE_NAMESPACE_VAULT
+      echo OCIR_STORAGE_NAMESPACE is $OCIR_STORAGE_NAMESPACE
+      echo Image will be stored to ${OCIR_HOST}/${OCIR_STORAGE_NAMESPACE}/${YOUR_INITIALS}devops/storefront:${STOREFRONT_VERSION}
+    onFailure:
+      - type: Command
+        timeoutInSeconds: 40
+        command: |
+          echo "Handling Failure"
+          echo "Failure successfully handled"
+        timeoutInSeconds: 400
+        runAs: root
+
+  - type: Command
+    name: "Install local JDK17"
+    timeoutInSeconds: 10000
+    command: |
+      cd ~
+      mkdir InstalledSoftware
+      cd InstalledSoftware
+      wget -q https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.tar.gz
+      tar xf *tar.gz
+      rm *tar.gz
+      ls -l
+      export JAVA_HOME=`echo -n ~/InstalledSoftware/jdk-*`
+      export PATH=$JAVA_HOME/bin:$PATH
+      echo Path is
+      echo $PATH
+      echo JAVA_HOME is
+      echo $JAVA_HOME
+      java -version
+    onFailure:
+      - type: Command
+        timeoutInSeconds: 40
+        command: |
+          echo "Handling Failure"
+          echo "Failure successfully handled"
+        timeoutInSeconds: 400
+        runAs: root
+        
+  - type: Command
+    name: "Confirm Variables and versions"
+    timeoutInSeconds: 10
+    command: |
+      echo PATH is $PATH
+      echo JAVA_HOME is $JAVA_HOME
+      echo STOREFRONT_VERSION is $STOREFRONT_VERSION
+      echo OCIR_HOST is $OCIR_HOST
+      echo OCIR_STORAGE_NAMEPACE is $OCIR_STORAGE_NAMEPACE
+      echo OCI_PRIMARY_SOURCE_DIR is ${OCI_PRIMARY_SOURCE_DIR}
+      echo This is the Java version, it should be Java 17
+      java -version
+      echo This is the maven version
+      mvn -v 
+    onFailure:
+      - type: Command
+        timeoutInSeconds: 40
+        command: |
+          echo "Handling Failure"
+          echo "Failure successfully handled"
+        timeoutInSeconds: 400
+        runAs: root
+        
+  - type: Command
+    name: "Build Source and pack into container image"
+    timeoutInSeconds: 400
+    command: |
+      cd ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full
+      echo Running maven package - Working in `pwd`
+      mvn package  
+      docker images
+          
+  - type: Command
+    name: "Fix resources location in container image"
+    timeoutInSeconds: 60
+    command: |
+      cd ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full
+      echo Running docker update - Working in `pwd`
+      docker build  --tag storefront:latest --file Dockerfile . 
+      echo images are
+      docker images
+     
+     
+# This basically preserves and "names" the artifacts below (if it's not here it gets junked) so the deliver artifact stage can handle them
+outputArtifacts:
+  - name: storefront_container_image
+    type: DOCKER_IMAGE
+    location: storefront:latest
+  - name: service_yaml
+    type: BINARY
+    location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full/yaml/deployment/serviceStorefront.yaml
+  - name: ingressRules_yaml
+    type: BINARY
+    location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full/yaml/deployment/ingressStorefrontRules.yaml
+  - name: deployment_yaml
+    type: BINARY
+    location: ${OCI_PRIMARY_SOURCE_DIR}/helidon-storefront-full/yaml/deployment/storefront-deployment.yaml
