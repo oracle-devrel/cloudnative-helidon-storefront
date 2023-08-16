@@ -1,10 +1,10 @@
 {
   "$schema": "https://raw.githubusercontent.com/todogroup/repolinter/master/rulesets/schema.json",
-  "version": 2,
+  "version": 3,
   "axioms": {},
   "rules": {
     "readme-file-exists" : {
-      "level": "error",
+      "level": "failure",
       "rule": {
         "type": "file-existence",
         "options": {
