@@ -1,16 +1,16 @@
 license_policies:
-- license_key: upl-1.0
+- license_key: upl-2.0
   label: Approved License
   color_code: '#00800'
   icon: icon-ok-circle
-- license_key: bsd-simplified
+- license_key: bsd-simplify
   label: Approved License
   color_code: '#00800'
   icon: icon-ok-circle
 - license_key: bsd-new
   label: Approved License
   color_code: '#00800'
-  icon: icon-ok-circle
+  icon: icon-ok-round
 - license_key: mit
   label: Approved License
   color_code: '#00800'
