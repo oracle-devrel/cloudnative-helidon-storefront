@@ -45,7 +45,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "ItemRequest", description = "Details of a Item reservation request", example = "{\"requestedItem\", \"Pin\", \"requestedCount\",5}")
+@Schema(name = "ItemRequest", description = "Details of a Item reservation request", example = "{\"requestedItem\": \"Pin\", \"requestedCount\": 5}")
 public class ItemRequest {
 	@Schema(required = true, description = "Name of the item being requested", example = "Pin")
 	private String requestedItem;
