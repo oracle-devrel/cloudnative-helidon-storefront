@@ -93,5 +93,5 @@ ORACLE AND ITS AFFILIATES DO NOT PROVIDE ANY WARRANTY WHATSOEVER, EXPRESS OR IMP
 
 ## Copyright
 
-Copyright (c) 2023 Oracle and/or its affiliates. All rights reserved.
+Copyright (c) 2024 Oracle and/or its affiliates. All rights reserved.
 The Universal Permissive License (UPL), Version 1.0
