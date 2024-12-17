@@ -50,11 +50,11 @@ SOFTWARE. -->
 		<mainClass>com.oracle.labs.helidon.storefront.Main</mainClass>
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
-		<version.lombok>1.18.30</version.lombok>
+		<version.lombok>1.18.36</version.lombok>
 		<version.jib>3.3.1</version.jib>
 		<version.jandex>3.1.2</version.jandex>
 		<sonar.skip>true</sonar.skip>
-		<container.image>ghcr.io/graalvm/graalvm-ce:ol9-java17-22.3.1</container.image>
+		<container.image>ghcr.io/graalvm/jdk-community:21</container.image>
 	</properties>
 	<groupId>com.oracle.labs.helidon</groupId>
 	<artifactId>storefront</artifactId>
