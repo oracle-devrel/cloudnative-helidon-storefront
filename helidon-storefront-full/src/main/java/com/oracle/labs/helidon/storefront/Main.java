@@ -95,8 +95,7 @@ public final class Main {
 		// need to
 		// build it before we can add it to the list. again if there were three or less
 		// we could pass the ConfigSource builder directly into the sources method of
-		// the
-		// config builder.
+		// the config builder.
 		List<Supplier<? extends ConfigSource>> configSourcesToScan = new ArrayList<>(5);
 		configSourcesToScan.add(ConfigSources.file("conf/storefront-config.yaml")
 				.pollingStrategy(PollingStrategies.regular(Duration.ofSeconds(5))).optional().build());

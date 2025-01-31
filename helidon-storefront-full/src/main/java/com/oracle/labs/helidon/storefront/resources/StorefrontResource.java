@@ -45,7 +45,6 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.metrics.annotation.Counted;
-import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
@@ -137,9 +136,6 @@ public class StorefrontResource {
 	@Fallback(fallbackMethod = "failedListStockItem")
 	// add a timer to track how long is spent in this call
 	@Timed(name = "listAllStockTimer")
-	// add a Meter to track how often we're called, absolute=true means the name
-	// given is used directly and not added to the class
-	@Metered(name = "listAllStockMeter", absolute = true)
 	@Operation(summary = "List stock items", description = "Returns a list of all of the stock items currently held in the database (the list may be empty if there are no items)")
 	@APIResponse(description = "A set of ItemDetails representing the current data in the database", responseCode = "200", content = @Content(schema = @Schema(name = "ItemDetails", implementation = ItemDetails.class, type = SchemaType.ARRAY), example = "[{\"itemCount\": 10, \"itemName\": \"Pencil\"},"
 			+ "{\"itemCount\": 50, \"itemName\": \"Eraser\"}," + "{\"itemCount\": 4600, \"itemName\": \"Pin\"},"
@@ -191,7 +187,7 @@ public class StorefrontResource {
 	@APIResponse(description = "The requested change does not meet the minimum level required for the change (i.e. is <= the minimumChange value)", responseCode = "406")
 	@APIResponse(description = "There are not enough of the requested item to fulfil your request", responseCode = "409")
 	public ItemDetails reserveStockItem(
-			@RequestBody(description = "The details of the item being requested", required = true, content = @Content(schema = @Schema(name = "ItemRequest", implementation = ItemRequest.class), example = "{\"requestedItem\",\"Pencil\",\"requestedCount\",5}")) ItemRequest itemRequest,
+			@RequestBody(description = "The details of the item being requested", required = true, content = @Content(schema = @Schema(name = "ItemRequest", implementation = ItemRequest.class), example = "{\"requestedItem\": \"Pencil\",\"requestedCount\": 5}")) ItemRequest itemRequest,
 			@Context SecurityContext securityContext)
 			throws MinimumChangeException, UnknownItemException, NotEnoughItemsException {
 		log.info("Requesting the reservation of " + itemRequest.getRequestedCount() + " items of "
