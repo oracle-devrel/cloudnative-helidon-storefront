@@ -142,10 +142,10 @@ SOFTWARE. -->
 		<!-- not quite sure why it fails to run withouh this entry, given this
 	package is imported elsewhere, 
           but it seems to fail if this isn't present on my system at least -->
-		<!--		<dependency>-->
-		<!--			<groupId>com.fasterxml.jackson.core</groupId>-->
-		<!--			<artifactId>jackson-databind</artifactId>-->
-		<!--		</dependency>-->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
 		<!-- SLF4J is a logging facade that let's us change the actual logger
 		used 
 			under the covers without changing our code, slf4j-jdk14 is for output to 
